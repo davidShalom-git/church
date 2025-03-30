@@ -86,8 +86,8 @@ const Home = () => {
       </div>
     </div>
       <div className='flex flex-col items-center justify-center h-[70vh]'>
-        <h1 className='text-white text-4xl md:text-7xl font-extrabold'>{text}</h1>
-        <p className='text-white text-xl'>.....Igniting Hearts, Transforming Lives.....</p>
+        <h1 className='text-white text-3xl md:text-7xl font-extrabold'>{text}</h1>
+       
       </div>
       
       <div className="flex flex-wrap justify-around items-center space-y-3 mx-auto mb-10 px-24">
