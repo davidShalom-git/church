@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import ai from '../Video/AI.mp4';
+import March_30 from '../Video/March_30.mp4';
 import Chemistry from '../Video/Chemistry.mp4';
 import DSA from '../Video/DSA.mp4';
 import English from '../Video/English.mp4';
-import Nav from './Nav';
+import mar30 from '../Video/March_30.jpg'
+
 import Footer from './Footer';
 
 const VideoGrid = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   const videos = [
-    { title: 'AI Video', video: ai },
+    { title: 'AI Video', video: March_30 },
     { title: 'Chemistry Video', video: Chemistry },
     { title: 'DSA Video', video: DSA },
     { title: 'English Video', video: English },
@@ -54,6 +55,7 @@ const VideoGrid = () => {
               <source src={selectedVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
+            <img src={mar30} />
           </div>
         )}
         <Footer />

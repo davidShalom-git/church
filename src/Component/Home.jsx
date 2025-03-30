@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "../assets/galaxy.png";
 import profile from "../assets/profile.png";
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [text, setText] = useState('');
@@ -14,6 +15,8 @@ const Home = () => {
   const indexRef = useRef(0);
   const timeoutRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const typeEffect = () => {
@@ -38,6 +41,14 @@ const Home = () => {
       }
     };
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove token from localStorage
+    setAuthStatus(false); // Update authentication state immediately
+    navigate('/login'); // Redirect to login page
+};
+
+
 
   return (
     <>
@@ -74,7 +85,8 @@ const Home = () => {
             </a>
             {/* Profile Section inside Navigation for Mobile */}
             <div className="md:hidden flex justify-center py-2">
-              <img src={profile} className="h-10 w-10" alt="Profile" />
+              <img src={profile} className="h-10 w-10" alt="Profile" onClick={handleLogout}/>
+              
             </div>
           </ul>
         </nav>
@@ -82,8 +94,8 @@ const Home = () => {
       
       {/* Profile Section - Right on Desktop */}
       <div className="hidden md:flex md:justify-end md:w-auto">
-        <img src={profile} className="h-10 w-10" alt="Profile" />
-      </div>
+    <img src={profile} className="h-10 w-10 cursor-pointer" alt="Profile" onClick={handleLogout} />
+</div>
     </div>
       <div className='flex flex-col items-center justify-center h-[70vh]'>
         <h1 className='text-white text-3xl md:text-7xl font-extrabold'>{text}</h1>
@@ -158,9 +170,14 @@ const Home = () => {
   <div className="flex items-center justify-center bg-yellow-300 h-60 w-60 rounded-full shadow-lg">
     <Link to='/video' className="text-center text-xl font-bold text-gray-800">Sunday Service</Link>
   </div>
- 
-
+<div className="flex flex-col md:flex-row mb-20 justify-center items-center gap-12 mt-20">
+  {/* Circle 1 */}
+  <div className="flex items-center justify-center bg-yellow-300 h-60 w-60 rounded-full shadow-lg">
+    <Link to='/morning' className="text-center text-xl font-bold text-gray-800">Daily Bread</Link>
+  </div>
 </div>
+</div>
+
 
 <Footer />
 

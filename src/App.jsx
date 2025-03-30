@@ -1,22 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Home from "./Component/Home";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
 import Video from "./Component/Video";
+import Signup from "./Auth/Signup";
+import SignIn from "./Auth/SignIn";
+import isAuthenticated from "./isAuth/isAuth";
+import Morning from "./Component/Morning";
 
-
+const ProtectedRoute = ({ children, authStatus }) => {
+    return authStatus ? children : <Navigate to="/login" replace />;
+};
 
 export default function App() {
-  return (
-    <>
-      <Router>
+    const [authStatus, setAuthStatus] = useState(false);
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/video" element={<Video />} />
-          
-        </Routes>
-  
-      </Router>
-    </>
-  );
+    // Check authentication status on app load
+    useEffect(() => {
+        setAuthStatus(isAuthenticated());
+    }, []);
+
+    return (
+        <>
+            <Router>
+                <Routes>
+                    {/* Public routes */}
+                    <Route path="/signup" element={<Signup setAuthStatus={setAuthStatus} />} />
+                    <Route path="/login" element={<SignIn setAuthStatus={setAuthStatus} />} />
+
+                    {/* Private routes */}
+                    <Route
+                        path="/"
+                        element={
+                            <ProtectedRoute authStatus={authStatus}>
+                                <Home setAuthStatus={setAuthStatus} />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/video"
+                        element={
+                            <ProtectedRoute authStatus={authStatus}>
+                                <Video />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/morning"
+                        element={
+                            <ProtectedRoute authStatus={authStatus}>
+                                <Morning />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </Router>
+        </>
+    );
 }
