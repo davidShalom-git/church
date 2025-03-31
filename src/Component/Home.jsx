@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "../assets/galaxy.png";
 import profile from "../assets/profile.png";
+import pas from "../assets/pas.png";
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
@@ -151,7 +152,7 @@ const Home = () => {
   {/* Image Section */}
   <div className="w-full md:w-1/2 flex flex-col justify-center items-center">
   
-    <img src={pres} className="w-[80%] md:w-full rounded-lg shadow-lg" alt="Presentation" />
+    <img src={pas} className="w-[80%] md:w-full rounded-lg shadow-lg" alt="Presentation" />
   </div>
 
   {/* Text Section */}
