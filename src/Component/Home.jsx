@@ -108,43 +108,48 @@ const Home = () => {
   {/* Card 1 */}
   <div className="bg-white p-8 h-[300px] w-[250px] rounded-2xl shadow-lg flex flex-col items-center">
     <img src={pres} className="w-40 h-40 rounded-full mb-4" alt="Presentation" />
-    <h2 className="text-lg font-bold mb-2">Presence</h2>
-    <p className="text-sm text-gray-500 text-center">A transformative experience to inspire growth.</p>
+    <h2 className="text-lg font-bold mb-2"> தன்னிலை </h2>
+    <p className="text-sm text-gray-500 text-center">வளர்ச்சியை ஊக்குவிக்க மாற்றமடைவது.
+    </p>
   </div>
 
   {/* Card 2 */}
   <div className="bg-white p-8 h-[300px] w-[250px]  rounded-2xl shadow-lg flex flex-col items-center">
     <img src={free} className="w-40 h-40 rounded-full mb-4" alt="Freedom" />
-    <h2 className="text-lg font-bold mb-2">Freedom</h2>
-    <p className="text-sm text-gray-500 text-center">Embrace your freedom and live your purpose.</p>
+    <h2 className="text-lg font-bold mb-2">சுதந்திரம்</h2>
+    <p className="text-sm text-gray-500 text-center">உங்கள் சுதந்திரத்தை அணிந்து, உங்கள் நோக்கத்தை வாழுங்கள்.</p>
   </div>
 
   {/* Card 3 */}
   <div className="bg-white p-8 h-[300px] w-[250px] rounded-2xl shadow-lg flex flex-col items-center">
     <img src={ignite} className="w-40 h-40 rounded-full mb-4" alt="Ignite" />
-    <h2 className="text-lg font-bold mb-2">Ignite Moments</h2>
-    <p className="text-sm text-gray-500 text-center">Spark change and ignite your passion.</p>
+    <h2 className="text-lg font-bold mb-2">தீப்பிளர்ந்த தருணங்கள்</h2>
+<p className="text-sm text-gray-500 text-center">மாற்றத்தை உருவாக்கவும், உங்கள் ஆர்வத்தை நிரூபிக்கவும்.</p>
   </div>
 </div>
 
-<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2' id='about'>Church</h1>
+<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2' id='about'>தேவாலயம்</h1>
 <div className="flex flex-col justify-center items-center bg-gray-50 w-[90%] mx-auto mt-20 p-8 mb-10 rounded-lg shadow-lg gap-10">
   {/* Image Section */}
   <div className="flex flex-col items-center">
-    <h1 className="text-center font-semibold text-2xl mb-4">Revival Prayer House TVM</h1>
+  <h1 className="text-center font-semibold text-2xl mb-4">மீள் வாழ்வு ஜெப இல்லம் திருவண்ணாமலை</h1>
     <img src={chruch} className="w-[90%] md:w-[80%] rounded-xl shadow-lg border border-gray-200" alt="Presentation" />
   </div>
 
   {/* Text Section */}
   <div className="flex flex-col items-center text-center px-6">
-    <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">Transform Your Journey</h2>
-    <p className="text-gray-600 text-base md:text-lg leading-relaxed">
-    Revival Prayer House is a place dedicated to fostering spiritual growth, prayer, and community connection. It serves as a sanctuary where individuals can come together to seek revival in their faith, experience the power of prayer, and deepen their relationship with God. Through worship services, prayer meetings, and outreach programs, Revival Prayer House aims to inspire hope, healing, and transformation in the lives of its members and the broader community.
-    </p>
+  <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">உங்கள் பயணத்தை மாற்றியமைக்கவும்</h2>
+<p className="text-gray-600 text-base md:text-lg leading-relaxed">
+மீளுருவாக்க ஜெப இல்லம் ஆவிக்குரிய வளர்ச்சி, ஜெபம் மற்றும் சமூக பிணைப்பை வளர்க்க அர்ப்பணிக்கப்பட்ட இடமாகும். 
+இது ஒரு சன்னதியாக செயல்படுகிறது, அங்கு தனிநபர்கள் அவர்களின் விசுவாசத்தில் மீளுருவாக்கத்தைத் தேடவும், 
+ஜெபத்தின் ஆற்றலை அனுபவிக்கவும், மற்றும் தேவனுடன் தொடர்பை மேலும் ஆழப்படுத்தவும் கூடி வரலாம். 
+வழிபாட்டு சேவைகள், ஜெபக் கூட்டங்கள் மற்றும் சமூகப் பணிகள் மூலம், மீளுருவாக்க ஜெப இல்லம் அதன் உறுப்பினர்களின் 
+வாழ்விலும் மற்றும் பரந்த சமூகத்திலும் நம்பிக்கை, குணமீட்டல் மற்றும் மாற்றத்தை ஊக்குவிக்க முயற்சிக்கிறது.
+</p>
   
   </div>
 </div>
-<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2'>About</h1>
+<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2'>விவரங்கள்</h1>
 
 
 <div className="flex flex-col md:flex-row justify-center mx-5 mb-20 items-center gap-6 bg-gray-100 mt-20 p-12 rounded-lg shadow-md">
@@ -156,26 +161,29 @@ const Home = () => {
 
   {/* Text Section */}
   <div className="w-full md:w-1/2">
-    <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">Vijay (Man of God)</h2>
+    <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">விஜய் (ஆண்டவரின் மனிதன்)</h2>
     <p className="text-gray-700 text-base md:text-lg leading-relaxed">
-    "Pastor Vijay has been a devoted servant of God for over years, guiding his congregation with wisdom, compassion, and unwavering faith. Known for his inspiring sermons and ability to connect with people of all ages, he is not only a spiritual leader but also a pillar of support in the community. Pastor Vijay dedication to his parish is evident in his tireless efforts to organize community outreach programs, support families in need, and mentor young members of the church. His humility and kindness have earned him the respect and love of all who know him, making him a true embodiment of the teachings of Christ."
+    "பாஸ்டர் விஜய் ஆண்டவருக்கு அர்ப்பணிக்கப்பட்ட சேவகராக பல ஆண்டுகளாக தன் சபையை ஞானத்துடன், கருணையுடன் மற்றும் மிகுந்த விசுவாசத்துடன் வழிநடத்தி வருகிறார். 
+    அனைத்து வயதினருடனும் தொடர்பு கொள்ளும் திறனால் மற்றும் அவரது ஊக்கமூட்டும் பிரசங்கங்களால் அவர் சிறந்த ஆவிக்குரிய தலைவராக மட்டுமல்ல, சமூகத்திற்கும் ஆதரவாக உள்ளார். 
+    பாஸ்டர் விஜயின் சேவை அவரது சபைக்கு ஏற்ப்படும் முறையில் தொண்டு திட்டங்கள், தேவைப்படும் குடும்பங்களை ஆதரிப்பது மற்றும் தேவாலயத்தின் இளைய உறுப்பினர்களை வழிகாட்டுவது ஆகியவற்றில் தெரிவிக்கிறது. 
+    அவரது தனிமையும் நன்மையும் அவரை அறிந்த அனைத்து மக்களிடமும் மரியாதையும் அன்பையும் பெறச்செய்கிறது, மற்றும் கிறிஸ்துவின் போதனைகளின் உண்மையான செயல்பாட்டினை அவர் எடுத்துக்காட்டுகிறார்."
     </p>
-  </div>
+</div>
 </div>
 
-<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2' id='event'>Events</h1>
+<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2' id='event'>நிகழ்ச்சிகள்</h1>
 
 <div className="flex flex-col md:flex-row mb-20 justify-center items-center gap-12 mt-20">
   {/* Circle 1 */}
   <div className="flex items-center justify-center bg-yellow-300 h-60 w-60 rounded-full shadow-lg">
-    <Link to='/video' className="text-center text-xl font-bold text-gray-800">Sunday Service</Link>
-  </div>
-<div className="flex flex-col md:flex-row mb-20 justify-center items-center gap-12 mt-20">
-  {/* Circle 1 */}
-  <div className="flex items-center justify-center bg-yellow-300 h-60 w-60 rounded-full shadow-lg">
-    <Link to='/morning' className="text-center text-xl font-bold text-gray-800">Daily Bread</Link>
+    <Link to='/video' className="text-center text-xl font-bold text-gray-800">ஞாயிற்று ஆராதனை</Link>
   </div>
 </div>
+<div className="flex flex-col md:flex-row mb-20 justify-center items-center gap-12 mt-20">
+  {/* Circle 2 */}
+  <div className="flex items-center justify-center bg-yellow-300 h-60 w-60 rounded-full shadow-lg">
+    <Link to='/morning' className="text-center text-xl font-bold text-gray-800">தினசரி தியானம் </Link>
+  </div>
 </div>
 
 
