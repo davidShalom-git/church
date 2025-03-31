@@ -157,9 +157,9 @@ const Home = () => {
 
   {/* Text Section */}
   <div className="w-full md:w-1/2">
-    <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">Richard (Man of God)</h2>
+    <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4">Vijay (Man of God)</h2>
     <p className="text-gray-700 text-base md:text-lg leading-relaxed">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi cumque amet magnam soluta voluptatum doloribus quis, esse asperiores aliquam dolor optio architecto id repellat molestiae illo obcaecati perspiciatis rem facere placeat natus fuga ut in ipsa quae. Nulla harum accusantium hic ipsum reprehenderit aspernatur sed porro aperiam dolorum, maiores labore quibusdam cum! Aspernatur necessitatibus sapiente soluta neque omnis architecto itaque, unde nemo fugit esse officia aliquam fuga cum nam nesciunt hic sint consequatur accusamus voluptatem deserunt. Consequuntur incidunt veritatis assumenda recusandae, nisi vel repellendus officiis a rem placeat perferendis numquam repudiandae tenetur rerum nulla pariatur accusantium quia? Ipsa, corporis voluptate.
+    "Pastor Vijay has been a devoted servant of God for over years, guiding his congregation with wisdom, compassion, and unwavering faith. Known for his inspiring sermons and ability to connect with people of all ages, he is not only a spiritual leader but also a pillar of support in the community. Pastor Vijay dedication to his parish is evident in his tireless efforts to organize community outreach programs, support families in need, and mentor young members of the church. His humility and kindness have earned him the respect and love of all who know him, making him a true embodiment of the teachings of Christ."
     </p>
   </div>
 </div>
