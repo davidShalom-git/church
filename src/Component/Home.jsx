@@ -100,7 +100,7 @@ const Home = () => {
 </div>
     </div>
       <div className='flex flex-col items-center justify-center h-[70vh]'>
-        <h1 className='text-white text-3xl md:text-7xl font-extrabold'>{text}</h1>
+        <h1 className='text-white text-xl md:text-7xl font-extrabold'>{text}</h1>
        
       </div>
       
