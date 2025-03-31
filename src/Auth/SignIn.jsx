@@ -63,30 +63,31 @@ const SignIn = ({ setAuthStatus }) => {
         >
             <div className="flex flex-col items-center w-full max-w-lg px-8 py-12 overflow-auto" style={glassStyle}>
                 <div className="text-center mb-8 p-4 rounded-lg w-full" style={titleStyle}>
-                    <h1 className="text-3xl text-white">SignIn</h1>
+                    <h1 className="text-3xl text-white">உள்நுழையவும்</h1>
                 </div>
                 <form className="flex flex-col w-full" onSubmit={onSubmit}>
-                    {Object.keys(formData).map((key) => (
-                        <input
-                            key={key}
-                            type={key === "Email" ? "email" : "text"}
-                            name={key}
-                            value={formData[key]}
-                            onChange={onChangeData}
-                            placeholder={`Enter your ${key.replace(/([A-Z])/g, ' $1')}`}
-                            className="px-4 py-3 rounded-2xl mb-4 w-full border border-white text-white placeholder-white bg-transparent"
-                        />
-                    ))}
-                    <button className="bg-black rounded-full py-3 text-white hover:bg-gray-800 transition duration-300 ease-in-out w-full">
-                        SignIn
-                    </button>
-                </form>
-                <button
-                    onClick={navigateToSignUp}
-                    className="mt-4 bg-transparent border border-white rounded-full py-3 text-white hover:bg-gray-800 hover:text-white transition duration-300 ease-in-out w-full"
-                >
-                    New User? Sign Up
-                </button>
+    {Object.keys(formData).map((key) => (
+        <input
+            key={key}
+            type={key === "Email" ? "email" : "text"}
+            name={key}
+            value={formData[key]}
+            onChange={onChangeData}
+            placeholder={` ${key === "Name" ? "பெயர்" : key === "Email" ? "மின்னஞ்சல்" : "கடவுச்சொல்"}`} // Tamil placeholder text
+            className="px-4 py-3 rounded-2xl mb-4 w-full border border-white text-white placeholder-white bg-transparent"
+        />
+    ))}
+    <button className="bg-black rounded-full py-3 text-white hover:bg-gray-800 transition duration-300 ease-in-out w-full">
+        உள்நுழையவும் {/* Tamil for "SignIn" */}
+    </button>
+</form>
+<button
+    onClick={navigateToSignUp}
+    className="mt-4 bg-transparent border border-white rounded-full py-3 text-white hover:bg-gray-800 hover:text-white transition duration-300 ease-in-out w-full"
+>
+    புதிய பயனர்? பதிவு செய்யவும் {/* Tamil for "New User? Sign Up" */}
+</button>
+               
             </div>
         </div>
     );
