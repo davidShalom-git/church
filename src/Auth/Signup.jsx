@@ -12,7 +12,7 @@ const Signup = () => {
 
     const navigation = useNavigate()
 
-    const api = "http://localhost:2000/api/auth/signup"
+    const api = "https://church-2.onrender.com/api/auth/signup"
 
     const signup = async () => {
         try {
