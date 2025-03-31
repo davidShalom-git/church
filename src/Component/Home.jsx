@@ -124,11 +124,10 @@ const Home = () => {
   <div className="bg-white p-8 h-[300px] w-[250px] rounded-2xl shadow-lg flex flex-col items-center">
     <img src={ignite} className="w-40 h-40 rounded-full mb-4" alt="Ignite" />
     <h2 className="text-lg font-bold mb-2">தீப்பிளர்ந்த தருணங்கள்</h2>
-<p className="text-sm text-gray-500 text-center">மாற்றத்தை உருவாக்கவும், உங்கள் ஆர்வத்தை நிரூபிக்கவும்.</p>
   </div>
 </div>
 
-<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2' id='about'>தேவாலயம்</h1>
+<h1 className='text-center text-black mt-24 font-extrabold text-2xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2' id='about'>தேவாலயம்</h1>
 <div className="flex flex-col justify-center items-center bg-gray-50 w-[90%] mx-auto mt-20 p-8 mb-10 rounded-lg shadow-lg gap-10">
   {/* Image Section */}
   <div className="flex flex-col items-center">
@@ -149,7 +148,7 @@ const Home = () => {
   
   </div>
 </div>
-<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2'>விவரங்கள்</h1>
+<h1 className='text-center text-black mt-24 font-extrabold text-2xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2'>விவரங்கள்</h1>
 
 
 <div className="flex flex-col md:flex-row justify-center mx-5 mb-20 items-center gap-6 bg-gray-100 mt-20 p-12 rounded-lg shadow-md">
@@ -171,7 +170,7 @@ const Home = () => {
 </div>
 </div>
 
-<h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2' id='event'>நிகழ்ச்சிகள்</h1>
+<h1 className='text-center text-black mt-24 font-extrabold text-2xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2' id='event'>நிகழ்ச்சிகள்</h1>
 
 <div className="flex flex-col md:flex-row mb-20 justify-center items-center gap-12 mt-20">
   {/* Circle 1 */}
