@@ -3,7 +3,7 @@ import March_30 from '../Video/March_30.mp4';
 import Chemistry from '../Video/Chemistry.mp4';
 import DSA from '../Video/DSA.mp4';
 import English from '../Video/English.mp4';
-import mar30 from '../Video/March_30.jpg'
+
 
 import Footer from './Footer';
 
@@ -55,7 +55,7 @@ const VideoGrid = () => {
               <source src={selectedVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-            <img src={mar30} />
+           
           </div>
         )}
         <Footer />
