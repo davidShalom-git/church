@@ -8,7 +8,11 @@ const auth = require('./router/User')
 
 
 app.use(bodyParser.json())
-app.use(cors());
+app.use(cors({
+    origin: 'https://church-rosy-rho.vercel.app/login', // Replace with your frontend domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true // Include credentials (like cookies) if needed
+}));
 
 mongoose.connect(process.env.MONGODB_URL).then(()=>{
     console.log("MongoDB Connected")
