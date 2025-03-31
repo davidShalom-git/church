@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 import logo from "../assets/galaxy.png";
 import profile from "../assets/profile.png";
 import pas from "../assets/pas.png";
+import chruch from "../assets/chruch.jpg";
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
@@ -130,19 +131,17 @@ const Home = () => {
 <div className="flex flex-col justify-center items-center bg-gray-50 w-[90%] mx-auto mt-20 p-8 mb-10 rounded-lg shadow-lg gap-10">
   {/* Image Section */}
   <div className="flex flex-col items-center">
-    <h1 className="text-center font-semibold text-2xl mb-4">ALC</h1>
-    <img src={pres} className="w-[90%] md:w-[80%] rounded-xl shadow-lg border border-gray-200" alt="Presentation" />
+    <h1 className="text-center font-semibold text-2xl mb-4">Revival Prayer House TVM</h1>
+    <img src={chruch} className="w-[90%] md:w-[80%] rounded-xl shadow-lg border border-gray-200" alt="Presentation" />
   </div>
 
   {/* Text Section */}
   <div className="flex flex-col items-center text-center px-6">
     <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-4">Transform Your Journey</h2>
     <p className="text-gray-600 text-base md:text-lg leading-relaxed">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi cumque amet magnam soluta voluptatum doloribus quis, esse asperiores aliquam dolor optio architecto id repellat molestiae illo obcaecati perspiciatis rem facere placeat natus fuga ut in ipsa quae. Nulla harum accusantium hic ipsum reprehenderit aspernatur sed porro aperiam dolorum, maiores labore quibusdam cum!
+    Revival Prayer House is a place dedicated to fostering spiritual growth, prayer, and community connection. It serves as a sanctuary where individuals can come together to seek revival in their faith, experience the power of prayer, and deepen their relationship with God. Through worship services, prayer meetings, and outreach programs, Revival Prayer House aims to inspire hope, healing, and transformation in the lives of its members and the broader community.
     </p>
-    <button className="mt-6 py-3 px-6 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-      Learn More
-    </button>
+  
   </div>
 </div>
 <h1 className='text-center text-black mt-24 font-extrabold text-4xl md:text-5xl bg-yellow-300 md:w-[25%] w-[50%] mx-auto rounded-3xl p-2'>About</h1>
