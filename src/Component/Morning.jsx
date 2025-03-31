@@ -19,7 +19,7 @@ const Morning = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row justify-center items-center p-3 w-[90%] rounded-3xl mx-auto mt-5 bg-yellow-300 shadow-md">
-        <h1 className="text-center text-xl md:text-2xl font-bold p-5">Daily Bread</h1>
+        <h1 className="text-center text-xl md:text-2xl font-bold p-5">தினசரி தியானம் </h1>
       </div>
       <div className=" mt-10 flex flex-col min-h-screen">
         {!selectedVideo ? (
