@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [text, setText] = useState('');
-  const fullText = "🔥 Revival Festival 🔥";
+  const fullText = "🔥 விடுதலை பெருவிழா 🔥";
   const indexRef = useRef(0);
   const timeoutRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
