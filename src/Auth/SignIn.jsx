@@ -69,7 +69,7 @@ const SignIn = ({ setAuthStatus }) => {
     {Object.keys(formData).map((key) => (
         <input
             key={key}
-            type={key === "Email" ? "email" : "text"}
+            type={key === "Email" ? "email" : key === "Password" ? "password" : "text"}
             name={key}
             value={formData[key]}
             onChange={onChangeData}
