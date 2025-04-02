@@ -10,4 +10,4 @@
     "routes": [
       { "src": "/api/(.*)", "dest": "Server.js" }
     ]
-  }
+}
