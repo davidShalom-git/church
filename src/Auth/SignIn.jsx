@@ -10,7 +10,7 @@ const SignIn = ({ setAuthStatus }) => {
     const [isLoading, setIsLoading] = useState(false); // NEW: Loading state
 
     const navigation = useNavigate();
-    const api = "https://church-2.onrender.com/api/auth/login";
+    const api = "https://church-fire.vercel.app/api/auth/login";
 
     const signIn = async () => {
         setIsLoading(true); // Show loading overlay
