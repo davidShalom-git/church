@@ -9,7 +9,7 @@ const auth = require('./router/User')
 
 app.use(bodyParser.json())
 app.use(cors({
-    origin: 'https://church-rosy-rho.vercel.app', // Replace with your frontend domain
+    origin: 'https://church-grace.vercel.app', // Replace with your frontend domain
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // Include credentials (like cookies) if needed
 }));
