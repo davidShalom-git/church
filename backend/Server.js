@@ -10,7 +10,8 @@ const app = express();
 // Allowed frontend domains
 const allowedOrigins = [
     'https://church-grace.vercel.app',
-    'https://church-rosy-rho.vercel.app'
+    'https://church-rosy-rho.vercel.app',
+    'http://localhost:4000'
 ];
 
 // CORS configuration
