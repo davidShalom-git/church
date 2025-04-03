@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from './Footer';
 
 const Morning = () => {
-  const videos = [
-    { title: 'March 30', link: 'https://www.youtube.com/live/FFaPydodqbE?si=2iP_UvZFCPHDwrrS' }, // Replace with actual YouTube link
-  ];
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    fetch('https://church-data.vercel.app/upload/data/url')
+      .then((response) => response.json())
+      .then((data) => setVideos(data))
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
 
   return (
     <>
@@ -20,7 +25,7 @@ const Morning = () => {
             {videos.map((vid, index) => (
               <a
                 key={index}
-                href={vid.link} // ✅ YouTube link
+                href={vid.url} // ✅ Retrieved YouTube link
                 target="_blank" // Opens in a new tab
                 rel="noopener noreferrer" // Security best practice
                 className="p-10 sm:p-12 lg:p-20 bg-white text-black rounded-lg shadow-md flex flex-col items-center cursor-pointer hover:bg-gray-200 transition duration-300"
@@ -30,8 +35,6 @@ const Morning = () => {
             ))}
           </div>
         </div>
-
-      
 
         <Footer />
       </div>

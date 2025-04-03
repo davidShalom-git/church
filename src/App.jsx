@@ -12,12 +12,21 @@ const ProtectedRoute = ({ children, authStatus }) => {
 };
 
 export default function App() {
-    const [authStatus, setAuthStatus] = useState(false);
+    const [authStatus, setAuthStatus] = useState(() => {
+        return localStorage.getItem("authStatus") === "true";
+    });
 
-    // Check authentication status on app load
+    // Update authentication status on app load
     useEffect(() => {
         setAuthStatus(isAuthenticated());
+        localStorage.setItem("authStatus", isAuthenticated());
     }, []);
+
+    // Logout function
+    const handleLogout = () => {
+        localStorage.removeItem("authStatus");
+        setAuthStatus(false);
+    };
 
     return (
         <>
@@ -32,7 +41,7 @@ export default function App() {
                         path="/"
                         element={
                             <ProtectedRoute authStatus={authStatus}>
-                                <Home setAuthStatus={setAuthStatus} />
+                                <Home setAuthStatus={setAuthStatus} onLogout={handleLogout} />
                             </ProtectedRoute>
                         }
                     />
