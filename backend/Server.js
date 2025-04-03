@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const auth = require('./router/User');
 
-const app = express();
+const app = express();  
 
 // Allowed frontend domains
 const allowedOrigins = [

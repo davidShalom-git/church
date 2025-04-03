@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from './Footer';
 
 const Morning = () => {
-  const videos = [
-    { title: 'March 30', link: 'https://www.youtube.com/live/FFaPydodqbE?si=2iP_UvZFCPHDwrrS' }, // Replace with actual YouTube link
-  ];
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch('https://church-data.vercel.app/upload/data/video');
+        if (!response.ok) throw new Error('Failed to fetch videos');
+
+        const data = await response.json();
+        setVideos(Array.isArray(data) ? data : [data]); // Ensure data is always an array
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      }
+    };
+
+    fetchVideos();
+  }, []);
 
   return (
     <>
@@ -20,9 +34,9 @@ const Morning = () => {
             {videos.map((vid, index) => (
               <a
                 key={index}
-                href={vid.link} // ✅ YouTube link
-                target="_blank" // Opens in a new tab
-                rel="noopener noreferrer" // Security best practice
+                href={vid.url} // ✅ Dynamically fetched URL
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-10 sm:p-12 lg:p-20 bg-white text-black rounded-lg shadow-md flex flex-col items-center cursor-pointer hover:bg-gray-200 transition duration-300"
               >
                 <h3 className="text-lg lg:text-2xl font-bold text-center">{vid.title}</h3>
@@ -30,8 +44,6 @@ const Morning = () => {
             ))}
           </div>
         </div>
-
-      
 
         <Footer />
       </div>
