@@ -450,11 +450,11 @@ const Home = () => {
                 transition={{ delay: 1.2, duration: 1 }}
               >
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
-                  <Link to="/video" className="group relative overflow-hidden bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 w-full">
+                  <a href='https://www.youtube.com/live/aYiOUaJQoxk?si=hrj9sRNh4PftJWEU' className="group relative overflow-hidden bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 w-full">
                     <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-500/0 via-indigo-300/20 to-indigo-500/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
                     <Play size={18} className="text-amber-300" />
-                    <span>ஆராதனை காணொளிகள்</span>
-                  </Link>
+                    <span>நேரடி ஜெப ஆராதனை</span>
+                  </a>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                   <a href="#event" className="group relative overflow-hidden bg-white hover:bg-gray-100 text-indigo-700 px-6 py-3 md:px-8 md:py-4 rounded-lg font-medium transition-colors w-full inline-block">
