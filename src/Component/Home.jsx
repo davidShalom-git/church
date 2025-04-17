@@ -12,6 +12,7 @@ import church from "../assets/chruch.jpg";
 import thurs from '../assets/thurs.jpg';
 import gf from '../assets/gf.jpg';
 import pas from "../assets/pas.png";
+import cross from '../assets/cross.jpg'
 
 // Container variants for Framer Motion
 const containerVariants = {
@@ -611,10 +612,9 @@ const Home = () => {
 
                 },
                 {
-                  img: ignite,
-                  title: "தீப்பிளர்ந்த தருணங்கள்",
-                  desc: "நம்பிக்கையை வளர்க்கும் தருணங்கள். ஒவ்வொரு நாளும் வளர்ச்சிக்கான புதிய வாய்ப்பு.",
-                  icon: <Play className="w-8 h-8 text-yellow-500" />
+                  img: cross,
+                  title: "ஈஸ்டர் ஆராதனை",
+                  date: "19 APR 2025"
                 }
               ].map((item, index) => (
                 <motion.div
