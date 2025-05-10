@@ -451,7 +451,7 @@ const Home = () => {
                 transition={{ delay: 1.2, duration: 1 }}
               >
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
-                  <a href='https://www.youtube.com/live/aYiOUaJQoxk?si=hrj9sRNh4PftJWEU' className="group relative overflow-hidden bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 w-full">
+                  <a href='https://www.youtube.com/watch?v=91FYRePs40g&list=PLFAPPjda8gQdZ-e-F7eC49pXb5wpV5O_Z' className="group relative overflow-hidden bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 w-full">
                     <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-500/0 via-indigo-300/20 to-indigo-500/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
                     <Play size={18} className="text-amber-300" />
                     <span>நேரடி ஜெப ஆராதனை</span>
@@ -595,7 +595,7 @@ const Home = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              எங்கள் கொள்கைகள்
+              அடுத்த சிறப்பு நிகழ்வு
             </motion.h2>
 
             <div className="grid md:grid-cols-3 gap-8 cards-container">
