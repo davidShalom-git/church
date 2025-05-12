@@ -7,13 +7,23 @@ const SignIn = ({ setAuthStatus }) => {
         Email: "",
         Password: ""
     });
-    const [isLoading, setIsLoading] = useState(false); // NEW: Loading state
+    const [isLoading, setIsLoading] = useState(false);
+    const [emailError, setEmailError] = useState("");
 
     const navigation = useNavigate();
     const api = "https://church-fire.vercel.app/api/auth/login";
 
     const signIn = async () => {
-        setIsLoading(true); // Show loading overlay
+        // Clear previous email error
+        setEmailError("");
+
+        // Check email validation
+        if (!formData.Email.includes("@gmail.com")) {
+            setEmailError("கட்டாயம் Gmail மின்னஞ்சல் பயன்படுத்தவும்!");
+            return;
+        }
+
+        setIsLoading(true);
         try {
             const response = await fetch(api, {
                 method: 'POST',
@@ -27,12 +37,12 @@ const SignIn = ({ setAuthStatus }) => {
             if (response.ok && data.token) {
                 localStorage.setItem('token', data.token);
                 setAuthStatus(true);
-                setTimeout(() => { // Delay navigation for smooth UX
+                setTimeout(() => {
                     setIsLoading(false);
                     navigation('/');
                 }, 1500);
             } else {
-                setIsLoading(false); // Hide loading overlay on failure
+                setIsLoading(false);
                 console.log("Login failed: ", data.message || response.statusText);
             }
         } catch (error) {
@@ -71,15 +81,19 @@ const SignIn = ({ setAuthStatus }) => {
                 {/* Sign-in Form */}
                 <form className="flex flex-col w-full" onSubmit={onSubmit}>
                     {Object.keys(formData).map((key) => (
-                        <input
-                            key={key}
-                            type={key === "Email" ? "email" : key === "Password" ? "password" : "text"}
-                            name={key}
-                            value={formData[key]}
-                            onChange={onChangeData}
-                            placeholder={` ${key === "Name" ? "பெயர்" : key === "Email" ? "மின்னஞ்சல்" : "கடவுச்சொல்"}`}
-                            className="px-4 py-3 rounded-2xl mb-4 w-full border border-white text-white placeholder-white bg-transparent"
-                        />
+                        <div key={key} className="mb-4">
+                            <input
+                                type={key === "Email" ? "email" : key === "Password" ? "password" : "text"}
+                                name={key}
+                                value={formData[key]}
+                                onChange={onChangeData}
+                                placeholder={` ${key === "Name" ? "பெயர்" : key === "Email" ? "மின்னஞ்சல்" : "கடவுச்சொல்"}`}
+                                className="px-4 py-3 rounded-2xl w-full border border-white text-white placeholder-white bg-transparent"
+                            />
+                            {key === "Email" && emailError && (
+                                <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                            )}
+                        </div>
                     ))}
                     <button className="bg-black rounded-full py-3 text-white hover:bg-gray-800 transition duration-300 w-full">
                         உள்நுழையவும்
