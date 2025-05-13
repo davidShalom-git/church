@@ -11,7 +11,9 @@ const app = express();
 const allowedOrigins = [
     'https://church-grace.vercel.app',
     'https://church-rosy-rho.vercel.app',
-    'http://localhost:4000'
+    'http://localhost:4000',
+    'https://www.revivalprayerhouse.online',
+    'https://revivalprayerhouse.netlify.app'
 ];
 
 // CORS configuration
