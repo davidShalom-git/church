@@ -53,14 +53,7 @@ export default function App() {
                             </ProtectedRoute>
                         }
                     />
-                    <Route
-                        path="/morning"
-                        element={
-                            <ProtectedRoute authStatus={authStatus}>
-                                <Morning />
-                            </ProtectedRoute>
-                        }
-                    />
+                   
                 </Routes>
             </Router>
         </>
