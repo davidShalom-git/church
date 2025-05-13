@@ -5,7 +5,7 @@ import Video from "./Component/Video";
 import Signup from "./Auth/Signup";
 import SignIn from "./Auth/SignIn";
 import isAuthenticated from "./isAuth/isAuth";
-import Morning from "./Component/Morning";
+
 
 const ProtectedRoute = ({ children, authStatus }) => {
     return authStatus ? children : <Navigate to="/login" replace />;
