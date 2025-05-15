@@ -55,7 +55,6 @@ const Home = () => {
   const upcomingEvents = [
     { date: "ஏப்ரல் 17 ", title: "குதிரை யுத்தநாளுக்கு ஆயத்தமாக்கப்படும்; ஜெயமோ கர்த்தரால் வரும்", verse: "நீதிமொழிகள் 21:31"},
     { date: "April 17", title: "The horse is made ready for the day of battle, but victory belongs to the Lord", verse: "Proverbs 21:31" },
-
   ];
 
   // Testimonials data
@@ -188,8 +187,19 @@ const Home = () => {
   };
 
   return (
-    <div className={darkMode ? "dark" : ""}>
-      <div className="bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-300">
+    <div className={`${darkMode ? "dark" : ""} min-h-screen w-full`}>
+      {/* Apply background color directly to the body tag */}
+      <style jsx global>{`
+        body {
+          background: ${darkMode ? 
+            'linear-gradient(to bottom, #111827, #1f2937)' : 
+            'linear-gradient(to bottom, #ffffff, #eff6ff)'};
+          min-height: 100vh;
+          width: 100%;
+        }
+      `}</style>
+      
+      <div className="bg-white dark:bg-gray-900 min-h-screen w-full transition-colors duration-300">
         {/* Navbar */}
         <motion.div
           className={`fixed top-0 left-0 right-0 z-50 ${isScrolled ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg' : 'bg-transparent'
@@ -241,22 +251,22 @@ const Home = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   {item === "Home" ? (
-                    <Link to="/" className="nav-link text-white text-xl">
+                    <Link to="/" className="nav-link text-gray-800 dark:text-white text-xl">
                       <Globe className="w-4 h-4" />
                       <span>{item}</span>
                     </Link>
                   ) : item === "Video" ? (
-                    <Link to="/video" className="nav-link text-white text-xl">
+                    <Link to="/video" className="nav-link text-gray-800 dark:text-white text-xl">
                       <Play className="w-4 h-4" />
                       <span>{item}</span>
                     </Link>
                   ) : item === "Events" ? (
-                    <a href="#event" className="nav-link text-white text-xl">
+                    <a href="#event" className="nav-link text-gray-800 dark:text-white text-xl">
                       <Calendar className="w-4 h-4" />
                       <span>{item}</span>
                     </a>
                   ) : (
-                    <a href="#about" className="nav-link text-white text-xl">
+                    <a href="#about" className="nav-link text-gray-800 dark:text-white text-xl">
                       <Users className="w-4 h-4" />
                       <span>{item}</span>
                     </a>
@@ -526,9 +536,6 @@ const Home = () => {
             </motion.a>
           </motion.div>
 
-          {/* Three Pillars Section with enhanced design */}
-       
-
           {/* Upcoming Events Section with animations */}
           <section id="event" className="py-16 bg-gradient-to-b from-indigo-50 to-white dark:from-gray-800 dark:to-gray-900">
             <div className="max-w-7xl mx-auto px-4">
@@ -541,343 +548,303 @@ const Home = () => {
               >
                 <h2 className="inline-block text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
                 தினசரி தியானம் மற்றும் வாக்குத்தத்தங்கள்
-
                 </h2>
                 
               </motion.div>
 
               <div className="grid md:grid-cols-2 gap-6 justify-center">
-  {upcomingEvents.map((event, index) => (
-    <motion.div
-      key={index}
-      className="event-animate bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
-      whileHover={{ scale: 1.05 }}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-    >
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 text-center">
-        <h3 className="text-2xl font-bold">{event.date}</h3>
-      </div>
-      <div className="p-6">
-        <h4 className="text-xl font-bold mb-2 dark:text-white">{event.title}</h4>
-        <h5 className="text-[15px] font-bold mb-2 dark:text-white mt-5">{event.verse}</h5>
-      </div>
-    </motion.div>
-  ))}
-</div>
+                {upcomingEvents.map((event, index) => (
+                  <motion.div
+                    key={index}
+                    className="event-animate bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
+                    whileHover={{ scale: 1.05 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 text-center">
+                      <h3 className="text-2xl font-bold">{event.date}</h3>
+                    </div>
+                    <div className="p-6">
+                      <h4 className="text-xl font-bold mb-2 dark:text-white">{event.title}</h4>
+                      <h5 className="text-[15px] font-bold mb-2 dark:text-white mt-5">{event.verse}</h5>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
 
               <motion.div
                 className="text-center mt-10"
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link
-                    to="/video"
-                    className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-full font-medium hover:bg-indigo-700 transition-colors"
-                  >
-                    அனைத்து நிகழ்வுகளையும் காண <ChevronDown size={16} />
-                  </Link>
-                </motion.div>
+                <Link
+                  to="/events"
+                  className="inline-block mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-medium px-6 py-3 rounded-full transition-colors"
+                >
+                  அனைத்து நிகழ்வுகளையும் காண
+                </Link>
               </motion.div>
             </div>
           </section>
 
-          <div className="max-w-7xl mx-auto px-4 py-16">
-            <motion.h2
-              className="text-center text-3xl md:text-4xl font-bold mb-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              அடுத்த சிறப்பு நிகழ்வு
-            </motion.h2>
-
-            <div className="grid md:grid-cols-3 gap-8 cards-container">
-              {[
-                {
-                  img: thurs,
-                  title: "சிறப்பு இராப்போஜன ஆராதனை",
-                  date: "17 APR 2025"
-                },
-                {
-                  img: gf,
-                  title: "புனித வெள்ளி ஆராதனை",
-                  date: "18 APR 2025"
-
-                },
-                {
-                  img: cross,
-                  title: "ஈஸ்டர் ஆராதனை",
-                  date: "19 APR 2025"
-                }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  className="card-animate group bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl flex flex-col items-center transition-all hover:shadow-2xl dark:shadow-indigo-900/20"
-                  whileHover={{ y: -8 }}
-                >
-                  <Link to='/video' className="relative mb-6">
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-indigo-600/40 to-purple-600/40 rounded-full transition-all"
-                      whileHover={{ scale: 1.1 }}
-                    ></motion.div>
-                    <img
-                      src={item.img}
-                      className="w-[600px] h-[500px] object-contain z-10 relative border-4 border-white dark:border-gray-700"
-                      alt={item.title}
-                    />
-                    <motion.div
-                      className="absolute top-0 right-0 bg-white dark:bg-gray-700 rounded-full p-2 shadow-lg"
-                      whileHover={{ rotate: 15 }}
-                    >
-                      {item.icon}
-                    </motion.div>
-                  </Link>
-                  <h2 className="text-2xl font-bold mb-3 text-center group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400 transition-colors">
-                    {item.title}
-                  </h2> <h2 className="text-[15px] font-bold mb-3 text-center group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400 transition-colors">
-                    {item.date}
-                  </h2>
-
-                  <motion.button
-                    className="mt-6 text-indigo-600 dark:text-indigo-400 font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                    whileHover={{ x: 5 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Link to='/video'>மேலும் அறிய</Link>
-                    
-                  </motion.button>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Testimonials with animation */}
-          <section className="py-16 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
-            <div className="max-w-7xl mx-auto px-4">
-              {/* Section Header */}
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-5xl font-bold text-indigo-700 dark:text-indigo-300 mb-4">
-                சாட்சிகள்
+          {/* About Section */}
+          <section id="about" className="py-16 bg-white dark:bg-gray-900">
+            <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
+              <motion.div
+                className="order-2 md:order-1"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                <h2 className="about-animate text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
+                  எங்களைப் பற்றி
                 </h2>
-                <div className="h-1 w-24 bg-purple-500 mx-auto mb-6 rounded-full"></div>
-                <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg">
-                தேவன் செய்த அற்புதங்கள் மற்றும் அடையாளங்கள்
+                <p className="about-animate text-gray-700 dark:text-gray-300 mb-4">
+                  எழுப்புதலின் ஜெப வீடு என்பது ஒரு வலுவான விசுவாசத்தின் சமூகமாகும், இது கிறிஸ்துவின் அன்பைப் பிரதிபலிக்கும் வகையில் கடவுளை வணங்குவதற்கும் சேவை செய்வதற்கும் அர்ப்பணிக்கப்பட்டுள்ளது.
                 </p>
-              </div>
+                <p className="about-animate text-gray-700 dark:text-gray-300 mb-4">
+                  நாங்கள் இயேசுவை மையமாகக் கொண்ட, வேதாகமத்தை அடிப்படையாகக் கொண்ட மற்றும் ஆவியால் நிரப்பப்பட்ட சபை சார்ந்த அனுபவத்தை வழங்குகிறோம், இது ஒவ்வொரு நபரும் கடவுளின் அன்பையும் கிருபையையும் உணர அனுமதிக்கிறது.
+                </p>
+                <p className="about-animate text-gray-700 dark:text-gray-300">
+                  நாங்கள் சேவை செய்யும் சமூகத்திற்கு நேர்மறையான மாற்றத்தைக் கொண்டு வருவதற்கும், அனைத்து நிலைகளிலும் உள்ள மக்களின் ஆன்மீக வளர்ச்சியை ஊக்குவிப்பதற்கும் எங்களை அர்ப்பணித்துள்ளோம்.
+                </p>
+              </motion.div>
 
-              {/* Testimonial Cards */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {testimonials.map((testimonial, index) => (
-                  <div
-                    key={index}
-                    className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-                  >
-                    {/* Card Header - Colored Bar */}
-                    <div className="h-3 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+              <motion.div
+                className="order-1 md:order-2 flex justify-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                <img
+                  src={pas}
+                  alt="Our Church"
+                  className="rounded-lg shadow-xl max-w-full h-auto"
+                />
+              </motion.div>
+            </div>
+          </section>
 
-                    {/* Card Content */}
-                    <div className="p-8">
-                      <div className="flex flex-col items-center mb-6">
-                        <div className="relative mb-4">
-                          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transform scale-110 opacity-30"></div>
-                          <img
-                            src={testimonial.image}
-                            alt={testimonial.name}
-                            className="w-20 h-20 rounded-full object-cover relative z-10 border-4 border-white dark:border-gray-700"
-                          />
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-800 dark:text-white">{testimonial.name}</h3>
-                      </div>
+          {/* Scripture with Image Parallax */}
+          <motion.section
+            className="relative py-24 bg-fixed bg-cover bg-center h-[60vh] flex items-center justify-center"
+            style={{ backgroundImage: `url(${cross})` }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+          >
+            <div className="absolute inset-0 bg-black/60"></div>
+            <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
+              <motion.h2
+                className="text-3xl md:text-4xl font-bold text-white mb-6"
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                "அன்றியும், ஒருவர் பாவங்களை மறுபடியும் நினையாதிருப்பேன் என்றும் சொல்லியிருக்கிறார்."
+              </motion.h2>
+              <motion.p
+                className="text-xl text-amber-300 font-medium"
+                initial={{ y: 30, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                - எபிரெயர் 10:17
+              </motion.p>
+            </div>
+          </motion.section>
 
-                      <p className="text-gray-600 dark:text-gray-300 text-center mb-6">"{testimonial.text}"</p>
+          {/* Featured Ministers Grid */}
+          <section className="py-16 bg-gradient-to-b from-white to-indigo-50 dark:from-gray-900 dark:to-gray-800">
+            <div className="max-w-7xl mx-auto px-4">
+              <motion.div
+                className="text-center mb-12"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
+                  சபை நிகழ்வு புகைப்படங்கள்
+                </h2>
+              </motion.div>
 
-                      <div className="flex justify-center space-x-1">
-                        {[...Array(5)].map((_, i) => (
-                          <svg
-                            key={i}
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            className="w-5 h-5 text-amber-500 fill-current"
-                          >
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                          </svg>
-                        ))}
-                      </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Featured Image 1 */}
+                <motion.div
+                  className="card-animate relative overflow-hidden rounded-xl shadow-lg group"
+                  whileHover={{ y: -10 }}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <img
+                    src={ignite}
+                    alt="Minister"
+                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-end">
+                    <div className="p-6 text-white">
+                      <h3 className="text-xl font-bold"> ‭இக்னைட்‬ (5வது செவ்வாய் இளைஞர் ஆராதனை)</h3>
+                      <p className="text-gray-300"></p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </motion.div>
 
-              {/* Navigation Dots (Optional) */}
-              <div className="flex justify-center mt-12 space-x-2">
-                {[...Array(3)].map((_, i) => (
-                  <button
-                    key={i}
-                    className={`w-3 h-3 rounded-full ${i === 0 ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'}`}
-                    aria-label={`Go to slide ${i + 1}`}
+                {/* Featured Image 2 */}
+                <motion.div
+                  className="card-animate relative overflow-hidden rounded-xl shadow-lg group"
+                  whileHover={{ y: -10 }}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
+                  <img
+                    src={thurs}
+                    alt="Minister"
+                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                ))}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-end">
+                    <div className="p-6 text-white">
+                      <h3 className="text-xl font-bold">வியாழன் ஜெப ஆராதனை</h3>
+                      <p className="text-gray-300"></p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Featured Image 3 */}
+                <motion.div
+                  className="card-animate relative overflow-hidden rounded-xl shadow-lg group"
+                  whileHover={{ y: -10 }}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <img
+                    src={free}
+                    alt="Minister"
+                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex items-end">
+                    <div className="p-6 text-white">
+                      <h3 className="text-xl font-bold">பரிசுத்த அன்னியபாஷை ஜெபம்</h3>
+                      <p className="text-gray-300"></p>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </div>
           </section>
 
-          {/* About Section */}
-          <section id="about" className="py-16 bg-gradient-to-b from-indigo-50 to-white dark:from-gray-800 dark:to-gray-900">
+          {/* Testimonials Section */}
+          <section className="py-16 bg-white dark:bg-gray-900">
             <div className="max-w-7xl mx-auto px-4">
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                <motion.div
-                  ref={aboutRef}
-                  className="about-animate"
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                >
-                  <h2 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
-                    எங்களைப் பற்றி
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
-                    எங்கள் தேவாலயம் அன்பு, ஏற்றுக்கொள்ளுதல் மற்றும் ஆன்மீக வளர்ச்சியின் சமூகமாகும். நாங்கள் 20 ஆண்டுகளுக்கும் மேலாக எங்கள் சமூகத்திற்கு சேவை செய்து வருகிறோம், விசுவாசிகளுக்கு அர்த்தமுள்ள வழிபாட்டு, வளர்ச்சி அனுபவங்கள் மற்றும் சேவை வாய்ப்புகளை வழங்குகிறோம்.
-                  </p>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                    எங்கள் தனித்துவமான கலாச்சார மரபு மற்றும் நவீன போதனை அணுகுமுறைகளை இணைக்கும் எங்கள் தேவாலயம், எல்லா வயதினருக்கும் மற்றும் பின்னணியில் இருந்து வருபவர்களுக்கும் வரவேற்பளிக்கும் இடமாக விளங்குகிறது.
-                  </p>
+              <motion.div
+                className="text-center mb-12"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
+                  சாட்சிகள்
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">
+                  கடவுள் எங்கள் சபையில் உள்ள மக்களின் வாழ்க்கையில் என்ன செய்துள்ளார் என்பதைக் கேளுங்கள்.
+                </p>
+              </motion.div>
 
-                </motion.div>
-
-                <motion.div
-                  className="about-animate relative"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                  <img
-                    src={pas}
-                    alt="Pastor"
-                    className="rounded-2xl shadow-2xl w-full h-auto z-10 relative"
-                  />
-                  <div className="absolute -bottom-6 -right-6 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg max-w-xs">
-                    <h3 className="text-lg font-bold mb-1 dark:text-white">பேஸ்டர் ஜான்</h3>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm">
-                      "அன்பு மற்றும் அக்கறையுடன் உங்களை வரவேற்கிறோம்"
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 testimonials-container">
+                {testimonials.map((testimonial, index) => (
+                  <motion.div
+                    key={index}
+                    className="testimonial-animate bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 p-6 rounded-xl shadow-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-indigo-300"
+                      />
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {testimonial.name}
+                      </h3>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-300 italic">
+                      "{testimonial.text}"
                     </p>
-                  </div>
-                  <div className="absolute -top-4 -left-4 w-24 h-24 bg-indigo-600/20 rounded-full z-0"></div>
-                  <div className="absolute bottom-20 left-0 w-16 h-16 bg-purple-600/20 rounded-full z-0"></div>
-                </motion.div>
+                    <div className="mt-4 flex">
+                      {[...Array(5)].map((_, i) => (
+                        <Heart
+                          key={i}
+                          size={16}
+                          className="text-amber-400 fill-amber-400 mr-1"
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </section>
 
           {/* Call to Action */}
-
-
-          {/* Call to Action Alternative */}
-          <motion.section
-            className="py-16 px-4"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="max-w-6xl mx-auto">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                {/* Left Side Content */}
-                <motion.div
-                  className="space-y-6 p-8"
-                  initial={{ x: -50 }}
-                  whileInView={{ x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
+          <section className="py-16 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+            <div className="max-w-7xl mx-auto px-4 text-center">
+              <motion.h2
+                className="text-3xl md:text-4xl font-bold mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                எங்களுடன் சேர்ந்து கடவுளை வணங்குங்கள்
+              </motion.h2>
+              <motion.p
+                className="text-xl max-w-2xl mx-auto mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+               கடவுளின் அன்பையும் வல்லமையையும் அனுபவிக்க இன்றே எங்களுடன் இணையுங்கள்.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <Link
+                  to="/contact"
+                  className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-4 rounded-full font-medium inline-block transition-colors"
                 >
-                  <motion.div
-                    className="inline-block rounded-lg bg-indigo-100 dark:bg-indigo-900/30 px-4 py-2"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <span className="text-indigo-600 dark:text-indigo-400 font-medium">
-                      சிறப்பு அழைப்பு ✨
-                    </span>
-                  </motion.div>
-                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
-                  தேவனுடைய ராஜ்யத்தை கட்டத்தயாரா?
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-300 text-lg">
-                    வாராந்திர ஆராதனைகள், விசேஷ கூட்டங்கள், மற்றும் சமூக நிகழ்வுகளில் பங்கேற்று ஆசீர்வாதங்களைப் பெறுங்கள்.
-                  </p>
-
-                  {/* Quick Stats */}
-                  <div className="grid grid-cols-3 gap-4 pt-8 border-t border-gray-200 dark:border-gray-700">
-                    {[
-                      { number: "20+", label: "ஆண்டுகள்" },
-                      { number: "1000+", label: "உறுப்பினர்கள்" },
-                      { number: "50+", label: "நிகழ்வுகள்" }
-                    ].map((stat, index) => (
-                      <motion.div
-                        key={index}
-                        className="text-center"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
-                          {stat.number}
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          {stat.label}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                {/* Right Side Image */}
-                <motion.div
-                  className="relative"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                >
-                  <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                    <img
-                      src={church}
-                      alt="Church Community"
-                      className="w-full h-[500px] object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/80 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-                          <Play className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <div className="font-medium">அடுத்த நிகழ்வு</div>
-                          <div className="text-sm text-white/80">ஞாயிறு காலை 9:00</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Decorative Elements */}
-                  <div className="absolute -top-4 -right-4 w-24 h-24 bg-purple-600/20 rounded-full -z-10"></div>
-                  <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-indigo-600/20 rounded-full -z-10"></div>
-                </motion.div>
-              </div>
+                  தொடர்பு கொள்ளுங்கள்
+                </Link>
+              </motion.div>
             </div>
-          </motion.section>
-        </div>
+          </section>
 
-        {/* Footer */}
-        <Footer darkMode={darkMode} />
+          {/* Footer */}
+          <Footer />
+        </div>
       </div>
     </div>
   );
