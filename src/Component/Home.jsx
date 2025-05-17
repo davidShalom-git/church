@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Calendar, Globe, Heart, ChevronDown, Play, Users, Moon, Sun } from "lucide-react";
+import { Menu, X, Calendar, Globe, Heart, ChevronDown, Play, Users, Moon, Sun, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Footer from './Footer';
 import logo from "../assets/galaxy.png";
 import profile from "../assets/profile.png";
-import pres from '../assets/pres.jpg';
-import free from '../assets/freedom.jpg';
-import ignite from '../assets/igni.jpg';
 import church from "../assets/chruch.jpg";
-import thurs from '../assets/thurs.jpg';
-import gf from '../assets/gf.jpg';
 import pas from "../assets/pas.png";
 import cross from '../assets/cross.jpg'
+import wordT from '../assets/may 17.jpg'
+import wordE from '../assets/may 17e.jpg'
+import SundayS from '../assets/SundayS.jpg'
 
 // Container variants for Framer Motion
 const containerVariants = {
@@ -53,8 +51,8 @@ const Home = () => {
 
   // Upcoming events data
   const upcomingEvents = [
-    { date: "ஏப்ரல் 17 ", title: "குதிரை யுத்தநாளுக்கு ஆயத்தமாக்கப்படும்; ஜெயமோ கர்த்தரால் வரும்", verse: "நீதிமொழிகள் 21:31" },
-    { date: "April 17", title: "The horse is made ready for the day of battle, but victory belongs to the Lord", verse: "Proverbs 21:31" },
+    { date: "மே 17 ", title: wordT, verse: "நீதிமொழிகள் 21:31" },
+    { date: "May 17", title: wordE, verse: "Proverbs 21:31" },
 
   ];
 
@@ -511,8 +509,8 @@ const Home = () => {
                 <Calendar size={24} />
               </motion.div>
               <div className="text-center md:text-left">
-                <h3 className="font-bold">அடுத்த சிறப்பு நிகழ்வு: இராப்போஜன ஆராதனை </h3>
-                <p className="text-white/80">ஏப்ரல் 17, 2025 - மாலை 6:30 </p>
+                <h3 className="font-bold">அடுத்த சிறப்பு நிகழ்வு: ஞாயிறு ஆராதனை </h3>
+                <p className="text-white/80">மே 18, 2025 - காலை 7:30 </p>
               </div>
             </div>
             <motion.a
@@ -560,8 +558,7 @@ const Home = () => {
                       <h3 className="text-2xl font-bold">{event.date}</h3>
                     </div>
                     <div className="p-6">
-                      <h4 className="text-xl font-bold mb-2 dark:text-white">{event.title}</h4>
-                      <h5 className="text-[15px] font-bold mb-2 dark:text-white mt-5">{event.verse}</h5>
+                     <img src={event.title} className='h-[500px] mx-auto' />
                     </div>
                   </motion.div>
                 ))}
@@ -600,14 +597,14 @@ const Home = () => {
             <div className="grid md:grid-cols-3 gap-8 cards-container">
               {[
                 {
-                  img: thurs,
-                  title: "சிறப்பு இராப்போஜன ஆராதனை",
-                  date: "17 APR 2025"
+                  img: SundayS,
+                  title: "ஞாயிறு ஆராதனை (காலை)",
+                  date: "18 MAY 2025"
                 },
                 {
-                  img: gf,
-                  title: "புனித வெள்ளி ஆராதனை",
-                  date: "18 APR 2025"
+                  img: SundayS,
+                  title: "ஞாயிறு ஆராதனை (மாலை)",
+                  date: "18 MAY 2025"
 
                 },
                 {
@@ -874,6 +871,30 @@ const Home = () => {
             </div>
           </motion.section>
         </div>
+
+        <div className="bg-white shadow-lg rounded-lg mb-20 p-8 w-full max-w-md mx-auto">
+      <div className="border-b pb-4 mb-6">
+        <h1 className="text-center text-3xl font-bold text-blue-700">ஜெப உதவிக்காக</h1>
+      </div>
+      
+      <div className="space-y-4">
+        <div className="flex items-center justify-center gap-3">
+          <Phone size={20} className="text-blue-600" />
+          <h2 className="text-center text-lg font-medium">+91 12323232</h2>
+        </div>
+        
+        <div className="flex items-center justify-center gap-3">
+          <Phone size={20} className="text-blue-600" />
+          <h2 className="text-center text-lg font-medium">+91 12323232</h2>
+        </div>
+        
+        <div className="flex items-center justify-center gap-3">
+          <Phone size={20} className="text-blue-600" />
+          <h2 className="text-center text-lg font-medium">+91 12323232</h2>
+        </div>
+      </div>
+    </div>
+
 
         {/* Footer */}
         <Footer darkMode={darkMode} />

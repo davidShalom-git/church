@@ -59,7 +59,7 @@ const Morning = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-yellow-50 to-white min-h-screen">
+    <div className="bg-gradient-to-b from-yellow-50 to-white min-h-screen flex flex-col">
       {/* Header */}
       <motion.div
         initial="hidden"
@@ -73,7 +73,7 @@ const Morning = () => {
       </motion.div>
 
       {/* Video Links Section */}
-      <div className="mt-12 flex flex-col min-h-screen pb-20">
+      <div className="mt-12 flex flex-col flex-grow">
         <div className="flex-grow flex items-center justify-center px-4">
           {loading ? (
             <motion.div
