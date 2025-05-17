@@ -583,7 +583,7 @@ const Home = () => {
             </div>
           </section>
 
-          <div className="max-w-7xl mx-auto px-4 py-16 bg-gradient-to-b from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+          <div id='event' className="max-w-7xl mx-auto px-4 py-16 bg-gradient-to-b from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
             <motion.h2
               className="text-center text-3xl md:text-4xl font-bold mb-12 bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400"
               initial={{ opacity: 0, y: 20 }}
