@@ -8,8 +8,8 @@ import profile from "../assets/profile.png";
 import church from "../assets/chruch.jpg";
 import pas from "../assets/pas.png";
 import cross from '../assets/cross.jpg'
-import wordT from '../assets/may 17.jpg'
-import wordE from '../assets/may 17e.jpg'
+import wordT from '../assets/wordT.jpg'
+import wordE from '../assets/wordE.jpg'
 import SundayS from '../assets/SundayS.jpg'
 
 // Container variants for Framer Motion

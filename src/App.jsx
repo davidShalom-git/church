@@ -11,16 +11,19 @@ const ProtectedRoute = ({ children, authStatus }) => {
     return authStatus ? children : <Navigate to="/login" replace />;
 };
 
+
 export default function App() {
     const [authStatus, setAuthStatus] = useState(() => {
         return localStorage.getItem("authStatus") === "true";
     });
+    
 
     // Update authentication status on app load
     useEffect(() => {
         setAuthStatus(isAuthenticated());
         localStorage.setItem("authStatus", isAuthenticated());
     }, []);
+
 
     // Logout function
     const handleLogout = () => {
