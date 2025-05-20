@@ -51,8 +51,8 @@ const Home = () => {
 
   // Upcoming events data
   const upcomingEvents = [
-    { date: "மே 17 ", title: wordT, verse: "நீதிமொழிகள் 21:31" },
-    { date: "May 17", title: wordE, verse: "Proverbs 21:31" },
+    { date: "மே 20 ", title: wordT, verse: "நீதிமொழிகள் 21:31" },
+    { date: "May 20", title: wordE, verse: "Proverbs 21:31" },
 
   ];
 
