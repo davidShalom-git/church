@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Calendar, Globe, Heart, ChevronDown, Play, Users, Moon, Sun, Phone } from "lucide-react";
+import { Menu, X, Calendar, Globe, ChevronDown, Play, Users, Moon, Sun, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Footer from './Footer';
 import logo from "../assets/galaxy.png";
