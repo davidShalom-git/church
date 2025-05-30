@@ -11,7 +11,7 @@ const app = express()
 
 // CORS configuration
 const corsOptions = {
-    origin: ['http://localhost:1200', 'https://www.revivalprayerhouse.online','http://localhost:4000','http://localhost:1000'],
+    origin: ['http://localhost:1200', 'https://www.revivalprayerhouse.online','http://localhost:4000','http://localhost:1000','https://church-ten-silk.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     optionsSuccessStatus: 200

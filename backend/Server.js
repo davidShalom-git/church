@@ -15,7 +15,8 @@ const allowedOrigins = [
     'https://www.revivalprayerhouse.online',
     'https://revivalprayerhouse.netlify.app',
     'http://localhost:1200',
-    'http://localhost:1000'
+    'http://localhost:1000',
+    'https://church-ten-silk.vercel.app'
 ];
 
 // CORS configuration
