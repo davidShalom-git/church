@@ -5,6 +5,7 @@ import Video from "./Component/Video";
 import Signup from "./Auth/Signup";
 import SignIn from "./Auth/SignIn";
 import isAuthenticated from "./isAuth/isAuth";
+import Images from "./Component/Images";
 
 
 const ProtectedRoute = ({ children, authStatus }) => {
@@ -53,6 +54,15 @@ export default function App() {
                         element={
                             <ProtectedRoute authStatus={authStatus}>
                                 <Video />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/images"
+                        element={
+                            <ProtectedRoute authStatus={authStatus}>
+                                <Images />
                             </ProtectedRoute>
                         }
                     />

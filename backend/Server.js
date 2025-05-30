@@ -13,7 +13,9 @@ const allowedOrigins = [
     'https://church-rosy-rho.vercel.app',
     'http://localhost:4000',
     'https://www.revivalprayerhouse.online',
-    'https://revivalprayerhouse.netlify.app'
+    'https://revivalprayerhouse.netlify.app',
+    'http://localhost:1200',
+    'http://localhost:1000'
 ];
 
 // CORS configuration
