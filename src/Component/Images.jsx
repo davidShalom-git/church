@@ -16,8 +16,8 @@ const Images = () => {
     const fetchImages = async () => {
         try {
             const [tamilRes, englishRes] = await Promise.all([
-                axios.get('http://localhost:1200/api/image/tam'),
-                axios.get('http://localhost:1200/api/image/eng')
+                axios.get('https://church-fire.vercel.app/api/image/tam'),
+                axios.get('https://church-fire.vercel.app/api/image/eng')
             ]);
 
             if (tamilRes.data.success) {
@@ -372,7 +372,7 @@ const Images = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <motion.img
-                                src={`http://localhost:1200/${selectedImage.image}`}
+                                src={`https://church-fire.vercel.app/${selectedImage.image}`}
                                 alt={selectedImage.fileName}
                                 className="w-full h-auto rounded-xl mb-4"
                                 initial={{ scale: 0.9 }}

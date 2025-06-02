@@ -58,8 +58,8 @@ const fetchImages = async () => {
     setLoading(true);
     // Fetch both Tamil and English images
     const [tamilRes, englishRes] = await Promise.all([
-      axios.get('http://localhost:1200/api/image/tam'),
-      axios.get('http://localhost:1200/api/image/eng')
+      axios.get('https://church-fire.vercel.app/api/image/tam'),
+      axios.get('https://church-fire.vercel.app/api/image/eng')
     ]);
     
     if (tamilRes.data.success) {
@@ -93,7 +93,7 @@ const fetchImage = async () => {
   try {
     setLoading(true);
     // Fetch event images
-    const eventRes = await axios.get('http://localhost:1200/api/image/images');
+    const eventRes = await axios.get('https://church-fire.vercel.app/api/image/images');
     
     if (eventRes.data.success) {
       // Sort and get only the latest 3 event images
@@ -139,14 +139,14 @@ const upcomingEvents = [
   { 
     date: "தமிழ்",
     images: tamImage.map(img => ({
-      url: `http://localhost:1200/${img.image}`,
+      url: `https://church-fire.vercel.app/${img.image}`,
       date: new Date(img.createdAt).toLocaleDateString()
     }))
   },
   { 
     date: "English",
     images: engImage.map(img => ({
-      url: `http://localhost:1200/${img.image}`,
+      url: `https://church-fire.vercel.app/${img.image}`,
       date: new Date(img.createdAt).toLocaleDateString()
     }))
   }
