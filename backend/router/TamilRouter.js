@@ -82,26 +82,26 @@ router.get('/tam', async (req, res) => {
 });
 
 // Get single image by ID
-// router.get('/images/:id', async (req, res) => {
-//     try {
-//         const image = await TamilModel.findById(req.params.id);
-//         if (!image) {
-//             return res.status(404).json({
-//                 success: false,
-//                 message: "Image not found"
-//             });
-//         }
-//         res.status(200).json({
-//             success: true,
-//             data: image
-//         });
-//     } catch (error) {
-//         res.status(500).json({
-//             success: false,
-//             message: "Error fetching image",
-//             error: error.message
-//         });
-//     }
-// });
+router.get('/images/:id', async (req, res) => {
+    try {
+        const image = await TamilModel.findById(req.params.id);
+        if (!image) {
+            return res.status(404).json({
+                success: false,
+                message: "Image not found"
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: image
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error fetching image",
+            error: error.message
+        });
+    }
+});
 
 module.exports = router;
