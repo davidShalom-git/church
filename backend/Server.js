@@ -22,7 +22,8 @@ const allowedOrigins = [
     'http://localhost:1200',
     'http://localhost:1000',
     'http://localhost:2000',
-    'https://church-ten-silk.vercel.app'
+    'https://church-ten-silk.vercel.app',
+    'https://church-fire.vercel.app'
 ];
 
 // CORS configuration
