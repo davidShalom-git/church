@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const TamilModel = require('../Models/Tamil');
+const TamilModel = require('../models/Tamil');
 const router = express.Router();
 
 // Configure multer for image upload

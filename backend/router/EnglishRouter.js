@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const EnglishModel = require('../Models/English');
+const EnglishModel = require('../models/English');
 const router = express.Router();
 
 // Configure multer for image upload
