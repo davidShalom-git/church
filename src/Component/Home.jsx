@@ -276,11 +276,7 @@ const upcomingEvents = [
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
-
+ 
 
 
 
@@ -372,13 +368,12 @@ const upcomingEvents = [
               </motion.button>
 
               <motion.img
-                src={profile}
-                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full cursor-pointer border-2 border-indigo-500 hover:border-indigo-700 transition-all"
-                alt="Profile"
-                onClick={handleLogout}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              />
+    src={profile}
+    className="h-8 w-8 sm:h-10 sm:w-10 rounded-full cursor-pointer border-2 border-indigo-500 hover:border-indigo-700 transition-all"
+    alt="Profile"
+    whileHover={{ scale: 1.1 }}
+    whileTap={{ scale: 0.9 }}
+/>
             </div>
           </div>
         </motion.div>
