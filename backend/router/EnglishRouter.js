@@ -41,44 +41,59 @@ const upload = multer({
             cb(error);
         }
     }
-}).single('image');
+});
 
 
 // Create uploads directory if it doesn't exist
 
 
 // Upload route
-router.post('/upload/eng', upload.single('image'), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Please upload an image" 
+router.post('/upload/eng', (req, res) => {
+    upload.single('image')(req, res, async function(err) {
+        try {
+            if (err instanceof multer.MulterError) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Multer error",
+                    error: err.message
+                });
+            } else if (err) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Error uploading file",
+                    error: err.message
+                });
+            }
+
+            if (!req.file) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "Please upload an image" 
+                });
+            }
+
+            const filePath = path.join('uploads_English', req.file.filename);
+
+            const newImage = await EnglishModel.create({
+                image: filePath,
+                fileName: req.file.originalname,
+                mimeType: req.file.mimetype
+            });
+
+            res.status(201).json({
+                success: true,
+                message: "Image uploaded successfully",
+                data: newImage
+            });
+        } catch (error) {
+            console.error('Upload error:', error);
+            res.status(500).json({
+                success: false,
+                message: "Error uploading image",
+                error: error.message
             });
         }
-
-        // Use path.join to create proper file path
-        const filePath = path.join('uploads_English', req.file.filename);
-
-        const newImage = await EnglishModel.create({
-            image: filePath,
-            fileName: req.file.originalname,
-            mimeType: req.file.mimetype
-        });
-
-        res.status(201).json({
-            success: true,
-            message: "Image uploaded successfully",
-            data: newImage
-        });
-    } catch (error) {
-        console.error('Upload error:', error); // Add logging
-        res.status(500).json({
-            success: false,
-            message: "Error uploading image",
-            error: error.message
-        });
-    }
+    });
 });
 
 // Get all images route

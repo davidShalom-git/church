@@ -27,30 +27,37 @@ const upload = multer({
         fileSize: 5 * 1024 * 1024 // 5MB limit
     },
     fileFilter: (req, file, cb) => {
-        const allowedTypes = /jpeg|jpg|png|gif/;
-        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = allowedTypes.test(file.mimetype);
+        try {
+            const allowedTypes = /jpeg|jpg|png|gif/;
+            const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+            const mimetype = allowedTypes.test(file.mimetype);
 
-        if (extname && mimetype) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only image files are allowed!'));
+            if (extname && mimetype) {
+                return cb(null, true);
+            }
+            cb(new Error('Only image files (jpg, jpeg, png, gif) are allowed!'));
+        } catch (error) {
+            cb(error);
         }
     }
-});
+}).single('image');
+
 
 // Upload route
 // filepath: c:\Users\david\OneDrive\Desktop\NS-Web\backend\router\TamilRouter.js
+
 router.post('/upload/tam', (req, res) => {
     upload(req, res, async function(err) {
         try {
             if (err instanceof multer.MulterError) {
+                console.error('Multer error:', err);  // Add error logging
                 return res.status(400).json({
                     success: false,
                     message: "Multer error",
                     error: err.message
                 });
             } else if (err) {
+                console.error('Upload error:', err);  // Add error logging
                 return res.status(400).json({
                     success: false,
                     message: "Error uploading file",
@@ -65,7 +72,6 @@ router.post('/upload/tam', (req, res) => {
                 });
             }
 
-            // Use path.join for creating file path
             const filePath = path.join('uploads_Tamil', req.file.filename);
 
             const newImage = await TamilModel.create({
@@ -80,7 +86,7 @@ router.post('/upload/tam', (req, res) => {
                 data: newImage
             });
         } catch (error) {
-            console.error('Upload error:', error);
+            console.error('Server error:', error);  // Add error logging
             res.status(500).json({
                 success: false,
                 message: "Error uploading image",
