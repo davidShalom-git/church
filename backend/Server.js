@@ -9,7 +9,6 @@ const eng = require('./router/EnglishRouter')
 const tam = require('./router/TamilRouter');
 const path = require('path');
 
-
 const app = express();  
 
 // Allowed frontend domains
@@ -24,27 +23,31 @@ const allowedOrigins = [
     'http://localhost:1000',
     'http://localhost:2000'
 ];
-   
-
 
 // CORS configuration
 app.use(cors({
     origin: function (origin, callback) {
+        console.log('🌐 CORS Check - Origin:', origin);
+        
         // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
+        if (!origin) {
+            console.log('✅ No origin - allowing request');
+            return callback(null, true);
+        }
         
         if (allowedOrigins.indexOf(origin) === -1) {
-            console.log('Blocked origin:', origin);
-            return callback(new Error('CORS not allowed'));
+            console.log('❌ Blocked origin:', origin);
+            return callback(new Error('CORS not allowed for origin: ' + origin));
         }
+        
+        console.log('✅ Allowed origin:', origin);
         return callback(null, true);
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: true,
-    maxAge: 86400 // Cache CORS preflight response for 24 hours
+    maxAge: 86400
 }));
-
 
 // Handle CORS preflight requests
 app.options('*', cors());
@@ -52,10 +55,25 @@ app.options('*', cors());
 // Middleware
 app.use(bodyParser.json());
 
-// Debugging: Log incoming request origins
+// Enhanced debugging middleware
 app.use((req, res, next) => {
-    console.log("Request Origin:", req.headers.origin);
+    console.log(`🔍 ${req.method} ${req.path}`);
+    console.log(`📍 Origin: ${req.headers.origin}`);
+    console.log(`🕐 Timestamp: ${new Date().toISOString()}`);
+    console.log('---');
     next();
+});
+
+// Test endpoint
+app.get('/api/test', (req, res) => {
+    console.log('🧪 Test endpoint hit!');
+    res.json({ 
+        message: 'Server is working!',
+        timestamp: new Date().toISOString(),
+        origin: req.headers.origin,
+        method: req.method,
+        path: req.path
+    });
 });
 
 // MongoDB Connection
@@ -68,20 +86,46 @@ mongoose.connect(process.env.MONGODB_URL, {
     console.log("❌ MongoDB Connection Error:", error);
 });
 
+// Static file serving
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use('/uploads_English', express.static(path.join(__dirname, 'uploads_English')))
 app.use('/uploads_Tamil', express.static(path.join(__dirname, 'uploads_Tamil')))
 
-
 // Routes
+console.log('🛣️  Setting up routes...');
 app.use('/api/auth', auth);
-app.use('/api/image', images)
-app.use('/api/image', eng)
-app.use('/api/image', tam)
+app.use('/api/image', images);
+app.use('/api/image', eng);
+app.use('/api/image', tam);
 
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
+    console.log(`❌ 404 - Route not found: ${req.method} ${req.originalUrl}`);
+    res.status(404).json({ 
+        error: 'API route not found',
+        path: req.originalUrl,
+        method: req.method,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Church Backend API',
+        version: '1.0.0',
+        endpoints: [
+            'GET /api/test',
+            'POST /api/auth/*',
+            'POST /api/image/*'
+        ]
+    });
+});
 
 // Start Server
 const PORT = process.env.PORT || 2000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔗 MongoDB: ${process.env.MONGODB_URL ? 'Configured' : 'Missing'}`);
 });
