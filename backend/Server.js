@@ -15,14 +15,11 @@ const app = express();
 // Allowed frontend domains
 const allowedOrigins = [
     'https://church-grace.vercel.app',
-    'https://church-rosy-rho.vercel.app',
     'http://localhost:4000',
     'https://www.revivalprayerhouse.online',
-    'https://revivalprayerhouse.netlify.app',
     'http://localhost:1200',
     'http://localhost:1000',
     'http://localhost:2000',
-    'https://church-ten-silk.vercel.app',
     'https://church-fire.vercel.app',
     'https://church-data-56lv.vercel.app'
 ];
