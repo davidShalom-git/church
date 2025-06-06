@@ -17,8 +17,6 @@ const app = express();
 const allowedOrigins = [
     'https://church-grace.vercel.app',
     'https://church-data-56lv.vercel.app',
-    'https://church-data.vercel.app',
-    'https://church-fire.vercel.app',
     'https://www.revivalprayerhouse.online',
     'http://localhost:4000',
     'http://localhost:1200',
