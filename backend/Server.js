@@ -12,15 +12,14 @@ const path = require('path');
 const app = express();  
 
 // Allowed frontend domains
+
+// Update the allowedOrigins array and CORS configuration
+
 const allowedOrigins = [
     'https://church-grace.vercel.app',
     'https://church-data-56lv.vercel.app',
     'https://church-data.vercel.app',
     'https://church-fire.vercel.app',
-    'https://church-fire.vercel.app/api/image/upload/tam',
-    'https://church-fire.vercel.app/api/image/upload/eng',
-    'https://church-fire.vercel.app/api/image/upload',
-    'https://church-data.vercel.app',
     'https://www.revivalprayerhouse.online',
     'http://localhost:4000',
     'http://localhost:1200',
@@ -28,33 +27,34 @@ const allowedOrigins = [
     'http://localhost:2000'
 ];
 
-// CORS configuration
+// Update CORS configuration
 app.use(cors({
-    origin: function (origin, callback) {
-        console.log('🌐 CORS Check - Origin:', origin);
-        
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) {
-            console.log('✅ No origin - allowing request');
-            return callback(null, true);
-        }
-        
-        if (allowedOrigins.indexOf(origin) === -1) {
-            console.log('❌ Blocked origin:', origin);
-            return callback(new Error('CORS not allowed for origin: ' + origin));
-        }
-        
-        console.log('✅ Allowed origin:', origin);
-        return callback(null, true);
-    },
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: true,
-    maxAge: 86400
+    maxAge: 86400,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 }));
 
+// Add headers middleware
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    next();
+});
+
+// Remove this line since we have CORS configured above
+// app.options('*', cors());
+
 // Handle CORS preflight requests
-app.options('*', cors());
+
 
 // Middleware
 app.use(bodyParser.json());
