@@ -4,6 +4,16 @@ const path = require('path');
 const TamilModel = require('../models/Tamil');
 const router = express.Router();
 
+router.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 // Use memory storage for Vercel compatibility
 const storage = multer.memoryStorage();
 
