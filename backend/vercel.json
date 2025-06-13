@@ -4,32 +4,12 @@
     {
       "src": "Server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "Router/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "Models/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "uploads/**/*",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/Router/$1"
-    },
-    {
-      "src": "/uploads/(.*)",
-      "dest": "/uploads/$1"
+      "src": "/(.*)",
+      "dest": "Server.js"
     }
-  ],
-  "env": {
-    "MONGODB_URL": "@mongodb_url",
-    "PORT": "3000"
-  }
+  ]
 }
