@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const TamilImageSchema = new mongoose.Schema({
+const ImageSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -10,7 +10,6 @@ const TamilImageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
   mimeType: {
     type: String,
     required: true
@@ -27,10 +26,6 @@ const TamilImageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  category: {
-    type: String,
-    default: 'tamil'
-  },
   uploadedAt: {
     type: Date,
     default: Date.now
@@ -39,4 +34,4 @@ const TamilImageSchema = new mongoose.Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('TamilImage', TamilImageSchema);
+module.exports = mongoose.model('Image', ImageSchema);

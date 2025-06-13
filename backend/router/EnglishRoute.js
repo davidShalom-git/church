@@ -2,21 +2,22 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const TamilImage = require('../Models/Tamil');
+const EnglishImage = require('../Models/English');
 
 const router = express.Router();
 
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/tamil/');
+    cb(null, 'uploads/english/');
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'tamil-' + file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    cb(null, 'english-' + file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
+// File filter for images
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);
@@ -29,12 +30,12 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 10 * 1024 * 1024
+    fileSize: 10 * 1024 * 1024 // 10MB limit
   }
 });
 
-// POST /api/tamil-images/upload
-router.post('/tam', upload.single('image'), async (req, res) => {
+// POST /api/english-images/upload
+router.post('/eng', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -43,16 +44,15 @@ router.post('/tam', upload.single('image'), async (req, res) => {
       });
     }
 
-    const { tamilName } = req.body;
 
-   
+
 
     const file = req.file;
     const filePath = path.join(__dirname, '..', file.path);
     const fileBuffer = fs.readFileSync(filePath);
     const base64Data = fileBuffer.toString('base64');
 
-    const newTamilImage = new TamilImage({
+    const newEnglishImage = new EnglishImage({
       name: file.filename,
       originalName: file.originalname,
       mimeType: file.mimetype,
@@ -61,11 +61,11 @@ router.post('/tam', upload.single('image'), async (req, res) => {
       uploadPath: file.path
     });
 
-    const savedImage = await newTamilImage.save();
+    const savedImage = await newEnglishImage.save();
 
     res.status(201).json({
       success: true,
-      message: 'Tamil image uploaded successfully',
+      message: 'English image uploaded successfully',
       data: {
         id: savedImage._id,
         name: savedImage.name,
@@ -76,7 +76,7 @@ router.post('/tam', upload.single('image'), async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error storing Tamil image:', error);
+    console.error('Error storing English image:', error);
 
     if (req.file) {
       const filePath = path.join(__dirname, '..', req.file.path);
@@ -87,15 +87,15 @@ router.post('/tam', upload.single('image'), async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: 'Failed to store Tamil image',
+      message: 'Failed to store English image',
       error: error.message
     });
   }
 });
 
-router.get('/tam',async(req,res)=> {
+router.get('/eng', async(req,res)=>{
     try {
-    const images = await TamilImage.find().sort({ createdAt: -1 });
+    const images = await EnglishImage.find().sort({ createdAt: -1 });
     
     res.status(200).json({
       success: true,
@@ -103,25 +103,25 @@ router.get('/tam',async(req,res)=> {
       data: images
     });
   } catch (error) {
-    console.error('Error fetching Tamil images:', error);
+    console.error('Error fetching English images:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch Tamil images',
+      message: 'Failed to fetch English images',
       error: error.message
     });
   }
 })
 
-router.get('/tam/:id',async(req,res)=>{
+router.get('/eng/:id',async (req,res)=> {
     try {
     const { id } = req.params;
     
-    const image = await TamilImage.findById(id);
+    const image = await EnglishImage.findById(id);
     
     if (!image) {
       return res.status(404).json({
         success: false,
-        message: 'Tamil image not found'
+        message: 'English image not found'
       });
     }
     
@@ -130,18 +130,18 @@ router.get('/tam/:id',async(req,res)=>{
       data: image
     });
   } catch (error) {
-    console.error('Error fetching Tamil image:', error);
+    console.error('Error fetching English image:', error);
     
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
-        message: 'Invalid Tamil image ID format'
+        message: 'Invalid English image ID format'
       });
     }
     
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch Tamil image',
+      message: 'Failed to fetch English image',
       error: error.message
     });
   }

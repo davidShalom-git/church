@@ -1,13 +1,35 @@
 {
-    "installCommand": "npm install --legacy-peer-deps",
-    "version": 2,
-    "builds": [
-      {
-        "src": "Server.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      { "src": "/api/(.*)", "dest": "Server.js" }
-    ]
+  "version": 2,
+  "builds": [
+    {
+      "src": "Server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "Router/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "Models/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "uploads/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/Router/$1"
+    },
+    {
+      "src": "/uploads/(.*)",
+      "dest": "/uploads/$1"
+    }
+  ],
+  "env": {
+    "MONGO_URI": "@mongo_uri",
+    "PORT": "3000"
+  }
 }

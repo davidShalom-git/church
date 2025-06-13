@@ -1,24 +1,41 @@
 const mongoose = require('mongoose');
 
-const EnglishSchema = new mongoose.Schema({
-    image: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true
-    },
-    fileName: {
-        type: String,
-        required: true
-    },
-    mimeType: {
-        type: String,
-        required: true
-    }
+const EnglishImageSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  originalName: {
+    type: String,
+    required: true
+  },
+  mimeType: {
+    type: String,
+    required: true
+  },
+  size: {
+    type: Number,
+    required: true
+  },
+  base64Data: {
+    type: String,
+    required: true
+  },
+  uploadPath: {
+    type: String,
+    required: true
+  },
+  category: {
+    type: String,
+    default: 'english'
+  },
+  uploadedAt: {
+    type: Date,
+    default: Date.now
+  }
 }, {
-    timestamps: true
+  timestamps: true
 });
 
-const EnglishModel = mongoose.model('English', EnglishSchema);
-
-module.exports = EnglishModel;
+module.exports = mongoose.model('EnglishImage', EnglishImageSchema);
