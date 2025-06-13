@@ -16,16 +16,12 @@ if (!process.env.MONGODB_URL) {
 }
 
 // MongoDB connection with enhanced error handling
-mongoose.connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log('MongoDB Connected successfully')
+mongoose.connect(process.env.MONGODB_URL).then(()=>{
+    console.log('Connected to MongoDB successfully')
 }).catch((error) => {
-    console.error('MongoDB connection error:', error)
-    process.exit(1)
+    console.error('Error connecting to MongoDB:', error)
+    process.exit(1) // Exit the process if connection fails
 })
-
 // Use /tmp for uploads in production (Vercel), local directory in development
 const baseUploadPath = process.env.NODE_ENV === 'production' ? '/tmp' : path.join(__dirname, 'uploads')
 const uploadDirs = ['general', 'tamil', 'english'].map(dir => path.join(baseUploadPath, dir))
