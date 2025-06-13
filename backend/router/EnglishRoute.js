@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const EnglishImage = require('../Models/English');
+const EnglishImage = require('../models/English');
 
 const router = express.Router();
 
