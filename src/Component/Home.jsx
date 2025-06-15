@@ -119,37 +119,33 @@ const Home = () => {
   const gsapContainerRef = useRef(null);
 
 
-  // Add this useEffect for auto-refresh
-  useEffect(() => {
-    fetchImages();
-    fetchImage() // Initial fetch
-
-    // Set up auto-refresh interval
-    const interval = setInterval(() => {
-      fetchImages();
-    }, 30000); // Refresh every 30 seconds
-
-    // Cleanup on unmount
-    return () => clearInterval(interval);
-  }, []);
+useEffect(() => {
+  fetchImages(); // Fetch Tamil and English images
+  fetchImage();  // Fetch event images
+}, []);
 
   // Upcoming events data
 
 // ...existing code...
+// Use base64 data directly since file URLs are not working
 const upcomingEvents = [
   {
     date: "தமிழ்",
-    images: tamImage.map(img => ({
-      url: `https://church-76ju.vercel.api/church/${img.image || "default.jpg"}`,
-      date: new Date(img.createdAt).toLocaleDateString()
-    }))
+    images: tamImage
+      .filter(img => img && (img.base64Data || img.name)) // Filter out items without image data
+      .map(img => ({
+        url: img.base64Data ? `data:${img.mimeType};base64,${img.base64Data}` : `https://church-76ju.vercel.app/api/files/${img.name}`,
+        date: new Date(img.createdAt).toLocaleDateString()
+      }))
   },
   {
     date: "English",
-    images: engImage.map(img => ({
-      url: `https://church-76ju.vercel.app/${img.image || "default.jpg"}`,
-      date: new Date(img.createdAt).toLocaleDateString()
-    }))
+    images: engImage
+      .filter(img => img && (img.base64Data || img.name)) // Filter out items without image data
+      .map(img => ({
+        url: img.base64Data ? `data:${img.mimeType};base64,${img.base64Data}` : `https://church-76ju.vercel.app/api/files/${img.name}`,
+        date: new Date(img.createdAt).toLocaleDateString()
+      }))
   }
 ];
 // ...existing code...
@@ -766,10 +762,15 @@ const upcomingEvents = [
                         transition={{ duration: 0.3 }}
                       >
                         <img
-                           src={`https://church-76ju.vercel.app/${item.image}`}
-                          className="w-full h-64 object-cover transition-transform duration-700 group-hover/image:scale-110 group-hover/image:rotate-1"
-                          alt={item.fileName}
-                        />
+  src={item.base64Data ? `data:${item.mimeType};base64,${item.base64Data}` : `https://church-76ju.vercel.app/api/files/${item.name}`}
+  className="w-full h-64 object-cover transition-transform duration-700 group-hover/image:scale-110 group-hover/image:rotate-1"
+  alt={item.originalName || item.name}
+  onError={(e) => {
+    console.error('Event image failed to load:', e.target.src);
+    e.target.onerror = null;
+    // You can set a fallback image here if needed
+  }}
+/>
 
                         {/* Image Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
