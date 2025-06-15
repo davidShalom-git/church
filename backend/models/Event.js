@@ -46,9 +46,9 @@ const ImageSchema = new mongoose.Schema({
 });
 
 // Add indexes for better performance
-imageSchema.index({ createdAt: -1 });
-imageSchema.index({ category: 1 });
-imageSchema.index({ name: 1 });
+ImageSchema.index({ createdAt: -1 });
+ImageSchema.index({ category: 1 });
+ImageSchema.index({ name: 1 });
 
 // If you had an 'image' field with unique constraint, remove it:
 // imageSchema.index({ image: 1 }, { unique: true, sparse: true });
