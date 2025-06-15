@@ -372,7 +372,7 @@ const Images = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <motion.img
-                                src={`https://church-76ju.vercel.app/${selectedImage.image}`}
+                                src={`https://church-76ju.vercel.app/${selectedImage.name}`}
                                 alt={selectedImage.fileName}
                                 className="w-full h-auto rounded-xl mb-4"
                                 initial={{ scale: 0.9 }}
