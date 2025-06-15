@@ -75,7 +75,7 @@ const Images = () => {
             setTamilImages(mockTamilImages);
             setEnglishImages(mockEnglishImages);
 
-            /* 
+            
             // Original API calls - uncomment when API is working
             const [tamilRes, englishRes] = await Promise.all([
                 fetch('https://church-76ju.vercel.app/api/church/tam'),
@@ -91,7 +91,7 @@ const Images = () => {
             if (englishData.success) {
                 setEnglishImages(englishData.data);
             }
-            */
+            
         } catch (err) {
             setError('Failed to fetch images');
             console.error(err);
