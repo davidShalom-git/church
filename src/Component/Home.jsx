@@ -140,7 +140,7 @@ const upcomingEvents = [
   {
     date: "தமிழ்",
     images: tamImage.map(img => ({
-      url: `https://church-76ju.vercel.app/${img.image || "default.jpg"}`,
+      url: `https://church-76ju.vercel.api/church/${img.image || "default.jpg"}`,
       date: new Date(img.createdAt).toLocaleDateString()
     }))
   },

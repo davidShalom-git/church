@@ -41,7 +41,7 @@ uploadDirs.forEach(dir => {
 
 // CORS and middleware setup
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://www.revivalprayerhouse.online','http://localhost:4000','https://localhost:4100', 'https://church-data-56lv.vercel.app',
+  origin: ['http://localhost:4000', 'https://www.revivalprayerhouse.online','http://localhost:4000','https://localhost:4100', 'https://church-data-56lv.vercel.app',
 
   ],
   credentials: true
