@@ -135,22 +135,24 @@ const Home = () => {
 
   // Upcoming events data
 
-  const upcomingEvents = [
-    {
-      date: "தமிழ்",
-      images: tamImage.map(img => ({
-        url: `https://church-76ju.vercel.app/${img.image}`,
-        date: new Date(img.createdAt).toLocaleDateString()
-      }))
-    },
-    {
-      date: "English",
-      images: engImage.map(img => ({
-        url: `https://church-76ju.vercel.app/${img.image}`,
-        date: new Date(img.createdAt).toLocaleDateString()
-      }))
-    }
-  ];
+// ...existing code...
+const upcomingEvents = [
+  {
+    date: "தமிழ்",
+    images: tamImage.map(img => ({
+      url: `https://church-76ju.vercel.app/${img.image || "default.jpg"}`,
+      date: new Date(img.createdAt).toLocaleDateString()
+    }))
+  },
+  {
+    date: "English",
+    images: engImage.map(img => ({
+      url: `https://church-76ju.vercel.app/${img.image || "default.jpg"}`,
+      date: new Date(img.createdAt).toLocaleDateString()
+    }))
+  }
+];
+// ...existing code...
 
   // Testimonials data
   const testimonials = [
@@ -764,7 +766,7 @@ const Home = () => {
                         transition={{ duration: 0.3 }}
                       >
                         <img
-                          src={`http://localhost:1200/${item.image}`}
+                           src={`https://church-76ju.vercel.app/${item.image}`}
                           className="w-full h-64 object-cover transition-transform duration-700 group-hover/image:scale-110 group-hover/image:rotate-1"
                           alt={item.fileName}
                         />
