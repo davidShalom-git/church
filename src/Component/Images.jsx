@@ -41,60 +41,56 @@ const Images = () => {
 
     const fetchImages = async () => {
         try {
-            // Simulating API calls with mock data since the actual API might not be accessible
-            const mockTamilImages = [
-                {
-                    _id: '1',
-                    name: 'tamil-verse-1.jpg',
-                    fileName: 'வேதாகம வசனம் 1',
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    _id: '2',
-                    name: 'tamil-verse-2.jpg',
-                    fileName: 'வேதாகம வசனம் 2',
-                    createdAt: new Date().toISOString()
-                }
-            ];
+            setLoading(true);
+            setError(null);
 
-            const mockEnglishImages = [
-                {
-                    _id: '3',
-                    name: 'english-verse-1.jpg',
-                    fileName: 'Biblical Verse 1',
-                    createdAt: new Date().toISOString()
-                },
-                {
-                    _id: '4',
-                    name: 'english-verse-2.jpg',
-                    fileName: 'Biblical Verse 2',
-                    createdAt: new Date().toISOString()
-                }
-            ];
-
-            setTamilImages(mockTamilImages);
-            setEnglishImages(mockEnglishImages);
-
-            
-            // Original API calls - uncomment when API is working
             const [tamilRes, englishRes] = await Promise.all([
                 fetch('https://church-76ju.vercel.app/api/church/tam'),
                 fetch('https://church-76ju.vercel.app/api/church/eng')
             ]);
 
+            // Check if responses are ok
+            if (!tamilRes.ok) {
+                throw new Error(`Tamil API error: ${tamilRes.status}`);
+            }
+            if (!englishRes.ok) {
+                throw new Error(`English API error: ${englishRes.status}`);
+            }
+
             const tamilData = await tamilRes.json();
             const englishData = await englishRes.json();
 
-            if (tamilData.success) {
+            console.log('Tamil data:', tamilData);
+            console.log('English data:', englishData);
+
+            // Handle the API response structure
+            if (tamilData.success && Array.isArray(tamilData.data)) {
                 setTamilImages(tamilData.data);
+            } else if (Array.isArray(tamilData)) {
+                // If data is directly an array
+                setTamilImages(tamilData);
+            } else {
+                console.warn('Unexpected Tamil data structure:', tamilData);
+                setTamilImages([]);
             }
-            if (englishData.success) {
+
+            if (englishData.success && Array.isArray(englishData.data)) {
                 setEnglishImages(englishData.data);
+            } else if (Array.isArray(englishData)) {
+                // If data is directly an array
+                setEnglishImages(englishData);
+            } else {
+                console.warn('Unexpected English data structure:', englishData);
+                setEnglishImages([]);
             }
             
         } catch (err) {
-            setError('Failed to fetch images');
-            console.error(err);
+            setError(`Failed to fetch images: ${err.message}`);
+            console.error('Fetch error:', err);
+            
+            // Set empty arrays on error
+            setTamilImages([]);
+            setEnglishImages([]);
         } finally {
             setLoading(false);
         }
@@ -108,7 +104,30 @@ const Images = () => {
         if (failedImages.has(image._id)) {
             return placeholderImage;
         }
-        return `https://church-76ju.vercel.app/${image.name}`;
+        
+        // Check if image has base64Data
+        if (image.base64Data) {
+            // Ensure proper data URL format
+            if (image.base64Data.startsWith('data:')) {
+                return image.base64Data;
+            } else {
+                // Add the data URL prefix if missing
+                const mimeType = image.mimeType || 'image/jpeg';
+                return `data:${mimeType};base64,${image.base64Data}`;
+            }
+        }
+        
+        // Fallback to URL path if base64Data is not available
+        if (image.name) {
+            return `https://church-76ju.vercel.app/${image.name}`;
+        }
+        
+        // Use placeholder if no image data available
+        return placeholderImage;
+    };
+
+    const getImageTitle = (image) => {
+        return image.fileName || image.originalName || image.name || 'Untitled';
     };
 
     const containerVariants = {
@@ -242,6 +261,14 @@ const Images = () => {
                 >
                     <div className="bg-red-50 dark:bg-red-900/20 p-6 rounded-xl border border-red-200 dark:border-red-800">
                         🙏 {error}
+                        <div className="mt-4">
+                            <button 
+                                onClick={fetchImages}
+                                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                            >
+                                Retry
+                            </button>
+                        </div>
                     </div>
                 </motion.div>
             ) : images.length === 0 ? (
@@ -278,7 +305,7 @@ const Images = () => {
                                 <div className="relative overflow-hidden">
                                     <motion.img
                                         src={getImageSrc(image)}
-                                        alt={image.fileName}
+                                        alt={getImageTitle(image)}
                                         className="w-full h-56 object-cover transition-transform duration-500 
                                                  group-hover:scale-110"
                                         onError={() => handleImageError(image._id)}
@@ -322,11 +349,11 @@ const Images = () => {
                                     <p className="text-gray-800 dark:text-gray-200 font-medium mb-2 
                                                group-hover:text-amber-600 dark:group-hover:text-amber-400 
                                                transition-colors duration-300 line-clamp-2">
-                                        {image.fileName}
+                                        {getImageTitle(image)}
                                     </p>
                                     <div className="flex items-center justify-between">
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            📅 {new Date(image.createdAt).toLocaleDateString()}
+                                            📅 {new Date(image.createdAt || image.uploadedAt).toLocaleDateString()}
                                         </p>
                                         <motion.div
                                             className="text-amber-500 opacity-0 group-hover:opacity-100"
@@ -336,6 +363,11 @@ const Images = () => {
                                             ✨
                                         </motion.div>
                                     </div>
+                                    {image.size && (
+                                        <p className="text-xs text-gray-400 mt-1">
+                                            📁 Size: {Math.round(image.size / 1024)}KB
+                                        </p>
+                                    )}
                                 </motion.div>
                             </div>
                         </motion.div>
@@ -458,18 +490,23 @@ const Images = () => {
                         >
                             <motion.img
                                 src={getImageSrc(selectedImage)}
-                                alt={selectedImage.fileName}
+                                alt={getImageTitle(selectedImage)}
                                 className="w-full h-auto rounded-xl mb-4"
                                 initial={{ scale: 0.9 }}
                                 animate={{ scale: 1 }}
                                 transition={{ duration: 0.3 }}
                             />
                             <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">
-                                {selectedImage.fileName}
+                                {getImageTitle(selectedImage)}
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400">
-                                📅 {new Date(selectedImage.createdAt).toLocaleDateString()}
+                                📅 {new Date(selectedImage.createdAt || selectedImage.uploadedAt).toLocaleDateString()}
                             </p>
+                            {selectedImage.size && (
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    📁 File size: {Math.round(selectedImage.size / 1024)}KB
+                                </p>
+                            )}
                             {failedImages.has(selectedImage._id) && (
                                 <div className="mt-2 p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg text-sm text-yellow-800 dark:text-yellow-200">
                                     ⚠️ Original image is not available. Showing placeholder.
