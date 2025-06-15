@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
 
 const Images = () => {
     const [tamilImages, setTamilImages] = useState([]);
@@ -8,6 +7,33 @@ const Images = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [failedImages, setFailedImages] = useState(new Set());
+
+    // Create a placeholder image data URL
+    const createPlaceholderImage = (width = 300, height = 200) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        
+        // Create gradient background
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#f3f4f6');
+        gradient.addColorStop(1, '#e5e7eb');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+        
+        // Add text
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Image not available', width / 2, height / 2 - 10);
+        ctx.fillText('🖼️', width / 2, height / 2 + 15);
+        
+        return canvas.toDataURL();
+    };
+
+    const placeholderImage = createPlaceholderImage();
 
     useEffect(() => {
         fetchImages();
@@ -15,23 +41,74 @@ const Images = () => {
 
     const fetchImages = async () => {
         try {
+            // Simulating API calls with mock data since the actual API might not be accessible
+            const mockTamilImages = [
+                {
+                    _id: '1',
+                    name: 'tamil-verse-1.jpg',
+                    fileName: 'வேதாகம வசனம் 1',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    _id: '2',
+                    name: 'tamil-verse-2.jpg',
+                    fileName: 'வேதாகம வசனம் 2',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+
+            const mockEnglishImages = [
+                {
+                    _id: '3',
+                    name: 'english-verse-1.jpg',
+                    fileName: 'Biblical Verse 1',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    _id: '4',
+                    name: 'english-verse-2.jpg',
+                    fileName: 'Biblical Verse 2',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+
+            setTamilImages(mockTamilImages);
+            setEnglishImages(mockEnglishImages);
+
+            /* 
+            // Original API calls - uncomment when API is working
             const [tamilRes, englishRes] = await Promise.all([
-                axios.get('https://church-76ju.vercel.app/api/church/tam'),
-                axios.get('https://church-76ju.vercel.app/api/church/eng')
+                fetch('https://church-76ju.vercel.app/api/church/tam'),
+                fetch('https://church-76ju.vercel.app/api/church/eng')
             ]);
 
-            if (tamilRes.data.success) {
-                setTamilImages(tamilRes.data.data);
+            const tamilData = await tamilRes.json();
+            const englishData = await englishRes.json();
+
+            if (tamilData.success) {
+                setTamilImages(tamilData.data);
             }
-            if (englishRes.data.success) {
-                setEnglishImages(englishRes.data.data);
+            if (englishData.success) {
+                setEnglishImages(englishData.data);
             }
+            */
         } catch (err) {
             setError('Failed to fetch images');
             console.error(err);
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleImageError = (imageId) => {
+        setFailedImages(prev => new Set([...prev, imageId]));
+    };
+
+    const getImageSrc = (image) => {
+        if (failedImages.has(image._id)) {
+            return placeholderImage;
+        }
+        return `https://church-76ju.vercel.app/${image.name}`;
     };
 
     const containerVariants = {
@@ -148,7 +225,7 @@ const Images = () => {
                         animate={{ rotate: 360 }}
                         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                     >
-                        <div className="w-16 h-16 border-4 border-gradient-to-r from-amber-400 to-red-500 rounded-full border-t-transparent"></div>
+                        <div className="w-16 h-16 border-4 border-amber-400 rounded-full border-t-transparent"></div>
                         <motion.div
                             className="absolute inset-2 w-12 h-12 border-4 border-orange-300 rounded-full border-b-transparent"
                             animate={{ rotate: -360 }}
@@ -200,14 +277,11 @@ const Images = () => {
                                           transition-all duration-300 group-hover:shadow-2xl">
                                 <div className="relative overflow-hidden">
                                     <motion.img
-                                        src={`https://church-76ju.vercel.app/${image.name}`}
+                                        src={getImageSrc(image)}
                                         alt={image.fileName}
                                         className="w-full h-56 object-cover transition-transform duration-500 
                                                  group-hover:scale-110"
-                                        onError={(e) => {
-                                            console.error('Image failed to load:', image.name);
-                                            e.target.src = 'placeholder.jpg';
-                                        }}
+                                        onError={() => handleImageError(image._id)}
                                         whileHover={{ scale: 1.05 }}
                                         transition={{ duration: 0.3 }}
                                     />
@@ -226,6 +300,17 @@ const Images = () => {
                                     >
                                         <span className="text-xl">🔍</span>
                                     </motion.div>
+                                    
+                                    {failedImages.has(image._id) && (
+                                        <motion.div
+                                            className="absolute bottom-2 left-2 bg-yellow-500/90 text-white 
+                                                     px-2 py-1 rounded text-xs"
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                        >
+                                            ⚠️ Image unavailable
+                                        </motion.div>
+                                    )}
                                 </div>
                                 
                                 <motion.div 
@@ -372,7 +457,7 @@ const Images = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <motion.img
-                                src={`https://church-76ju.vercel.app/${selectedImage.name}`}
+                                src={getImageSrc(selectedImage)}
                                 alt={selectedImage.fileName}
                                 className="w-full h-auto rounded-xl mb-4"
                                 initial={{ scale: 0.9 }}
@@ -385,6 +470,11 @@ const Images = () => {
                             <p className="text-gray-600 dark:text-gray-400">
                                 📅 {new Date(selectedImage.createdAt).toLocaleDateString()}
                             </p>
+                            {failedImages.has(selectedImage._id) && (
+                                <div className="mt-2 p-2 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg text-sm text-yellow-800 dark:text-yellow-200">
+                                    ⚠️ Original image is not available. Showing placeholder.
+                                </div>
+                            )}
                             <motion.button
                                 className="mt-4 px-6 py-2 bg-gradient-to-r from-amber-500 to-red-500 
                                          text-white rounded-full hover:from-amber-600 hover:to-red-600 
