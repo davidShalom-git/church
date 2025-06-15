@@ -16,8 +16,8 @@ const Images = () => {
     const fetchImages = async () => {
         try {
             const [tamilRes, englishRes] = await Promise.all([
-                axios.get('https://church-fire.vercel.app/api/image/tam'),
-                axios.get('https://church-fire.vercel.app/api/image/eng')
+                axios.get('https://church-76ju.vercel.app/api/church/tam'),
+                axios.get('https://church-76ju.vercel.app/api/church/eng')
             ]);
 
             if (tamilRes.data.success) {
@@ -200,12 +200,12 @@ const Images = () => {
                                           transition-all duration-300 group-hover:shadow-2xl">
                                 <div className="relative overflow-hidden">
                                     <motion.img
-                                        src={`http://localhost:1200/${image.image}`}
+                                        src={`https://church-76ju.vercel.app/${image.name}`}
                                         alt={image.fileName}
                                         className="w-full h-56 object-cover transition-transform duration-500 
                                                  group-hover:scale-110"
                                         onError={(e) => {
-                                            console.error('Image failed to load:', image.image);
+                                            console.error('Image failed to load:', image.name);
                                             e.target.src = 'placeholder.jpg';
                                         }}
                                         whileHover={{ scale: 1.05 }}
@@ -372,7 +372,7 @@ const Images = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <motion.img
-                                src={`https://church-fire.vercel.app/${selectedImage.image}`}
+                                src={`https://church-76ju.vercel.app/${selectedImage.image}`}
                                 alt={selectedImage.fileName}
                                 className="w-full h-auto rounded-xl mb-4"
                                 initial={{ scale: 0.9 }}
