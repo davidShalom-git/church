@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Enable CORS
 router.use(cors({
-  origin: ['http://localhost:3000', 'https://church-76ju.vercel.app'], // Adjust to your frontend origins
+  origin: ['http://localhost:3000', 'https://church-76ju.vercel.app','https://church-data-age.vercel.app','https://church-data-56lv.vercel.app'], // Adjust to your frontend origins
   methods: ['GET', 'POST', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Accept']
 }));
