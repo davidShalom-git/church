@@ -7,10 +7,8 @@ import logo from "../assets/galaxy.png";
 import profile from "../assets/profile.png";
 import church from "../assets/chruch.jpg";
 import pas from "../assets/pas.png";
-import cross from '../assets/cross.jpg'
 import wordT from '../assets/wordT.jpg'
 import wordE from '../assets/wordE.jpg'
-import SundayS from '../assets/SundayS.jpg'
 import axios from 'axios';
 
 // Container variants for Framer Motion
