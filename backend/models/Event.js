@@ -25,7 +25,7 @@ const ImageSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: [1, 'File size must be greater than 0'],
-    max: [50 * 1024 * 1024, 'File size cannot exceed 50MB'] // 50MB limit
+    max: [5 * 1024 * 1024, 'File size cannot exceed 5MB'] // Align with client
   },
   base64Data: {
     type: String,
@@ -49,20 +49,21 @@ const ImageSchema = new mongoose.Schema({
     maxlength: [500, 'Description cannot exceed 500 characters']
   }
 }, {
-  timestamps: true // This adds createdAt and updatedAt automatically
+  timestamps: true
 });
 
-// Add indexes for better performance
+// Add indexes for performance
 ImageSchema.index({ createdAt: -1 });
 ImageSchema.index({ category: 1 });
-ImageSchema.index({ name: 1 }, { unique: false }); // Remove unique constraint if causing issues
+// Removed unique index on name to allow duplicates
+ImageSchema.index({ name: 1 });
 
-// Add a method to get file URL
+// Method to get file URL
 ImageSchema.methods.getFileUrl = function() {
   return `data:${this.mimeType};base64,${this.base64Data}`;
 };
 
-// Add a virtual for file info
+// Virtual for file info
 ImageSchema.virtual('fileInfo').get(function() {
   return {
     name: this.name,
