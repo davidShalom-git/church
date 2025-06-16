@@ -31,7 +31,7 @@ mongoose
 // Create upload directories
 const baseUploadPath = process.env.NODE_ENV === 'production'
   ? '/tmp'
-  : path.join(__dirname, 'Uploads');
+  : path.join(__dirname, 'uploads');
 const uploadDirs = ['general', 'tamil', 'english'].map((dir) =>
   path.join(baseUploadPath, dir)
 );
