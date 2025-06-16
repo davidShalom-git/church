@@ -104,17 +104,18 @@ const handleMulterError = (err, req, res, next) => {
 };
 
 // POST /api/church/upload
+
+// POST /api/church/upload
 router.post('/upload', (req, res) => {
   console.log('Upload endpoint hit');
   console.log('Headers:', req.headers);
   console.log('Content-Type:', req.get('Content-Type'));
-  
-  // Use upload middleware
-  upload.single('image')(req, res, async (err) => {
-    let uploadedFilePath = null;
-    
+
+  // Change from .single to .array
+  upload.array('images', 10)(req, res, async (err) => {
+    let uploadedFilePaths = [];
+
     try {
-      // Handle multer errors first
       if (err) {
         console.error('Multer error:', err);
         return handleMulterError(err, req, res, () => {
@@ -125,59 +126,42 @@ router.post('/upload', (req, res) => {
         });
       }
 
-      console.log('File info:', req.file);
-      console.log('Body:', req.body);
-
-      // Check if file was uploaded
-      if (!req.file) {
-        return res.status(400).json({ 
-          success: false, 
-          message: 'No file uploaded. Make sure to use "image" as the field name.' 
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'No files uploaded. Make sure to use "images" as the field name.'
         });
       }
 
-      uploadedFilePath = req.file.path;
-      
-      // Verify file exists
-      if (!fs.existsSync(uploadedFilePath)) {
-        throw new Error('Uploaded file not found on disk');
-      }
+      console.log('Uploaded files:', req.files);
 
-      // Read file and convert to base64
-      const fileBuffer = fs.readFileSync(uploadedFilePath);
-      const base64Data = fileBuffer.toString('base64');
+      const savedImages = [];
 
-      // Create image document with all necessary fields
-      const imageData = {
-        name: req.file.filename,
-        originalName: req.file.originalname,
-        mimeType: req.file.mimetype,
-        size: req.file.size,
-        base64Data: base64Data, // Store just the base64 string, not with data URL prefix
-        uploadPath: path.relative(path.join(__dirname, '..'), uploadedFilePath),
-        category: req.body.category || 'general',
-        description: req.body.description || req.file.originalname
-      };
+      for (const file of req.files) {
+        const filePath = file.path;
+        uploadedFilePaths.push(filePath);
 
-      console.log('Attempting to save image data...');
-      const newImage = new Image(imageData);
-      const savedImage = await newImage.save();
-      console.log('Image saved successfully:', savedImage._id);
-
-      // Clean up physical file after saving to database
-      try {
-        if (fs.existsSync(uploadedFilePath)) {
-          fs.unlinkSync(uploadedFilePath);
-          console.log('Physical file cleaned up');
+        if (!fs.existsSync(filePath)) {
+          throw new Error(`Uploaded file not found on disk: ${filePath}`);
         }
-      } catch (cleanupError) {
-        console.warn('Warning: Could not clean up physical file:', cleanupError.message);
-      }
 
-      res.status(201).json({
-        success: true,
-        message: 'Image uploaded successfully',
-        data: {
+        const fileBuffer = fs.readFileSync(filePath);
+        const base64Data = fileBuffer.toString('base64');
+
+        const imageData = {
+          name: file.filename,
+          originalName: file.originalname,
+          mimeType: file.mimetype,
+          size: file.size,
+          base64Data,
+          uploadPath: path.relative(path.join(__dirname, '..'), filePath),
+          category: req.body.category || 'general',
+          description: req.body.description || file.originalname
+        };
+
+        const newImage = new Image(imageData);
+        const savedImage = await newImage.save();
+        savedImages.push({
           id: savedImage._id,
           name: savedImage.name,
           originalName: savedImage.originalName,
@@ -186,50 +170,44 @@ router.post('/upload', (req, res) => {
           uploadedAt: savedImage.createdAt,
           category: savedImage.category,
           description: savedImage.description
+        });
+
+        // Clean up file
+        try {
+          fs.unlinkSync(filePath);
+        } catch (cleanupErr) {
+          console.warn(`Cleanup failed for ${filePath}:`, cleanupErr.message);
         }
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: 'Images uploaded successfully',
+        count: savedImages.length,
+        data: savedImages
       });
 
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error uploading images:', error);
 
-      // Clean up uploaded file on error
-      if (uploadedFilePath && fs.existsSync(uploadedFilePath)) {
+      // Cleanup in case of error
+      for (const filePath of uploadedFilePaths) {
         try {
-          fs.unlinkSync(uploadedFilePath);
-          console.log('Cleaned up file after error');
+          if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
         } catch (cleanupError) {
           console.error('Error cleaning up file:', cleanupError);
         }
       }
 
-      // Handle specific MongoDB errors
-      if (error.code === 11000) {
-        const duplicateField = Object.keys(error.keyPattern || {})[0];
-        return res.status(400).json({
-          success: false,
-          message: `Duplicate value for field: ${duplicateField}`,
-          error: 'A record with this value already exists'
-        });
-      }
-
-      // Handle validation errors
-      if (error.name === 'ValidationError') {
-        const validationErrors = Object.values(error.errors).map(err => err.message);
-        return res.status(400).json({
-          success: false,
-          message: 'Validation failed',
-          errors: validationErrors
-        });
-      }
-
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
-        message: 'Failed to upload image',
+        message: 'Failed to upload images',
         error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
       });
     }
   });
 });
+
 
 // Test endpoint to check if router is working
 router.get('/upload/test', (req, res) => {
