@@ -112,7 +112,7 @@ router.post('/upload', (req, res) => {
   console.log('Content-Type:', req.get('Content-Type'));
 
   // Change from .single to .array
-  upload.array('image', 10)(req, res, async (err) => {
+  upload.single('image')(req, res, async (err) => {
     let uploadedFilePaths = [];
 
     try {

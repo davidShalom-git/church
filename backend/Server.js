@@ -46,6 +46,7 @@ const corsOptions = {
         'https://www.revivalprayerhouse.online',
         'http://localhost:4000',
         'http://localhost:4100', // Changed from https to http for localhost
+        'http://localhost:1000', // Changed from https to http for localhost
         'https://church-data-56lv.vercel.app'
     ],
     credentials: true,
