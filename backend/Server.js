@@ -62,6 +62,7 @@ const corsOptions = {
     'https://www.revivalprayerhouse.online',
     'https://church-data-56lv.vercel.app',
     'https://church-76ju.vercel.app',
+    'https://church-data-age.vercel.app'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
