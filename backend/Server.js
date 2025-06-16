@@ -92,9 +92,9 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Routes - Use distinct paths to avoid conflicts
-app.use('/api/church/event', eventRouter);
-app.use('/api/church/tamil', tamilRouter);
-app.use('/api/church/english', englishRouter);
+app.use('/api/church', eventRouter);
+app.use('/api/church', tamilRouter);
+app.use('/api/church', englishRouter);
 
 // Health check
 app.get('/health', (req, res) => {
