@@ -22,21 +22,16 @@ const EnglishSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  uploadPath: {
-    type: String,
-    required: false
-  },
   uploadedAt: {
     type: Date,
     default: Date.now
   }
-  // Removed the 'image' field since it's not used in the router
 }, {
-  timestamps: true, // This adds createdAt and updatedAt automatically
+  timestamps: true, // Automatically adds createdAt and updatedAt fields
   collection: 'english' // Explicitly set collection name
 });
 
-// Ensure indexes are properly set
+// Ensure indexes are properly set for efficient queries
 EnglishSchema.index({ name: 1 });
 EnglishSchema.index({ uploadedAt: -1 });
 EnglishSchema.index({ createdAt: -1 });
