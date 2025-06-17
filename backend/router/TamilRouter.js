@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const Image = require('../models/Tamil.js');
+const Tamil = require('../models/Tamil.js'); // Correct model reference
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ const upload = multer({
   }
 });
 
-// POST /api/images/upload - Store image
+// POST /api/images/tam - Upload an image
 router.post('/tam', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
@@ -35,21 +35,22 @@ router.post('/tam', upload.single('image'), async (req, res) => {
     }
 
     const file = req.file;
-    
+
     // Generate unique filename
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const fileName = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
-    
+
     // Convert buffer to base64
     const base64Data = file.buffer.toString('base64');
 
-    const newImage = new Image({
+    const newImage = new Tamil({
       name: fileName,
       originalName: file.originalname,
       mimeType: file.mimetype,
       size: file.size,
       base64Data: base64Data,
-      uploadPath: `memory-${fileName}` // Placeholder path since it's required
+      uploadPath: `memory-${fileName}`,
+      image: `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` // Ensure unique image field
     });
 
     const savedImage = await newImage.save();
@@ -68,7 +69,6 @@ router.post('/tam', upload.single('image'), async (req, res) => {
     });
   } catch (error) {
     console.error('Error storing image:', error);
-
     res.status(500).json({
       success: false,
       message: 'Failed to store image',
@@ -77,11 +77,11 @@ router.post('/tam', upload.single('image'), async (req, res) => {
   }
 });
 
-// GET /api/images/event - Get all images
+// GET /api/images/tam - Retrieve all images
 router.get('/tam', async (req, res) => {
   try {
-    const images = await Image.find().sort({ createdAt: -1 });
-    
+    const images = await Tamil.find().sort({ uploadedAt: -1 }); // Consistent sorting
+
     res.status(200).json({
       success: true,
       count: images.length,
@@ -97,34 +97,34 @@ router.get('/tam', async (req, res) => {
   }
 });
 
-// GET /api/images/event/:id - Get single image
+// GET /api/images/tam/:id - Retrieve a single image
 router.get('/tam/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const image = await Image.findById(id);
-    
+
+    const image = await Tamil.findById(id);
+
     if (!image) {
       return res.status(404).json({
         success: false,
         message: 'Image not found'
       });
     }
-    
+
     res.status(200).json({
       success: true,
       data: image
     });
   } catch (error) {
     console.error('Error fetching image:', error);
-    
+
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
         message: 'Invalid image ID format'
       });
     }
-    
+
     res.status(500).json({
       success: false,
       message: 'Failed to fetch image',
@@ -134,22 +134,22 @@ router.get('/tam/:id', async (req, res) => {
 });
 
 // GET /api/images/serve/:id - Serve image directly
-router.get('/tam/:id', async (req, res) => {
+router.get('/serve/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const image = await Image.findById(id);
-    
+
+    const image = await Tamil.findById(id);
+
     if (!image) {
       return res.status(404).json({
         success: false,
         message: 'Image not found'
       });
     }
-    
+
     // Convert base64 back to buffer and serve
     const imageBuffer = Buffer.from(image.base64Data, 'base64');
-    
+
     res.setHeader('Content-Type', image.mimeType);
     res.setHeader('Content-Length', imageBuffer.length);
     res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
