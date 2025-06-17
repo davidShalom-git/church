@@ -44,9 +44,6 @@ router.post('/eng', upload.single('image'), async (req, res) => {
       });
     }
 
-
-
-
     const file = req.file;
     const filePath = path.join(__dirname, '..', file.path);
     const fileBuffer = fs.readFileSync(filePath);
