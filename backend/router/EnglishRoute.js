@@ -2,24 +2,14 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const EnglishImage = require('../models/English');
+const EnglishImage = require('../models/English.js');
 
 const router = express.Router();
-
-// Set upload path based on environment
-const baseUploadPath = process.env.NODE_ENV === 'production'
-  ? '/tmp/english'
-  : path.join(__dirname, '..', 'uploads', 'english');
-
-// Ensure the directory exists
-if (!fs.existsSync(baseUploadPath)) {
-  fs.mkdirSync(baseUploadPath, { recursive: true });
-}
 
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, baseUploadPath);
+    cb(null, 'uploads/english/');
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -27,7 +17,7 @@ const storage = multer.diskStorage({
   }
 });
 
-// File filter for images only
+// File filter for images
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);
@@ -37,29 +27,38 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 }
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  }
 });
 
-// POST /api/church/eng — Upload English image
+// POST /api/english-images/upload
 router.post('/eng', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: 'No file uploaded' });
+      return res.status(400).json({
+        success: false,
+        message: 'No file uploaded'
+      });
     }
 
-    const filePath = path.join(baseUploadPath, req.file.filename);
+
+
+
+    const file = req.file;
+    const filePath = path.join(__dirname, '..', file.path);
     const fileBuffer = fs.readFileSync(filePath);
     const base64Data = fileBuffer.toString('base64');
 
     const newEnglishImage = new EnglishImage({
-      name: req.file.filename,
-      originalName: req.file.originalname,
-      mimeType: req.file.mimetype,
-      size: req.file.size,
-      base64Data,
-      uploadPath: path.relative(path.join(__dirname, '..'), filePath)
+      name: file.filename,
+      originalName: file.originalname,
+      mimeType: file.mimetype,
+      size: file.size,
+      base64Data: base64Data,
+      uploadPath: file.path
     });
 
     const savedImage = await newEnglishImage.save();
@@ -79,9 +78,11 @@ router.post('/eng', upload.single('image'), async (req, res) => {
   } catch (error) {
     console.error('Error storing English image:', error);
 
-    const failedPath = path.join(baseUploadPath, req.file?.filename || '');
-    if (fs.existsSync(failedPath)) {
-      fs.unlinkSync(failedPath);
+    if (req.file) {
+      const filePath = path.join(__dirname, '..', req.file.path);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     res.status(500).json({
@@ -92,10 +93,10 @@ router.post('/eng', upload.single('image'), async (req, res) => {
   }
 });
 
-// GET /api/church/eng — Fetch all English images
-router.get('/eng', async (req, res) => {
-  try {
+router.get('/eng', async(req,res)=>{
+    try {
     const images = await EnglishImage.find().sort({ createdAt: -1 });
+    
     res.status(200).json({
       success: true,
       count: images.length,
@@ -109,41 +110,41 @@ router.get('/eng', async (req, res) => {
       error: error.message
     });
   }
-});
+})
 
-// GET /api/church/eng/:id — Fetch single image by ID
-router.get('/eng/:id', async (req, res) => {
-  try {
+router.get('/eng/:id',async (req,res)=> {
+    try {
     const { id } = req.params;
+    
     const image = await EnglishImage.findById(id);
-
+    
     if (!image) {
       return res.status(404).json({
         success: false,
         message: 'English image not found'
       });
     }
-
+    
     res.status(200).json({
       success: true,
       data: image
     });
   } catch (error) {
     console.error('Error fetching English image:', error);
-
+    
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
         message: 'Invalid English image ID format'
       });
     }
-
+    
     res.status(500).json({
       success: false,
       message: 'Failed to fetch English image',
       error: error.message
     });
   }
-});
+})
 
 module.exports = router;

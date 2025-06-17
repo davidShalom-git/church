@@ -2,24 +2,14 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const TamilImage = require('../models/Tamil');
+const TamilImage = require('../models/Tamil.js');
 
 const router = express.Router();
-
-// Dynamically decide upload directory
-const baseUploadPath = process.env.NODE_ENV === 'production'
-  ? '/tmp/tamil'
-  : path.join(__dirname, '..', 'uploads', 'tamil');
-
-// Ensure directory exists
-if (!fs.existsSync(baseUploadPath)) {
-  fs.mkdirSync(baseUploadPath, { recursive: true });
-}
 
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, baseUploadPath);
+    cb(null, 'uploads/tamil/');
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -27,35 +17,48 @@ const storage = multer.diskStorage({
   }
 });
 
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only image files are allowed!'), false);
+  }
+};
+
 const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed!'), false);
-    }
-  },
-  limits: { fileSize: 10 * 1024 * 1024 }
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024
+  }
 });
 
-// POST /api/church/tam — Upload Tamil image
+// POST /api/tamil-images/upload
 router.post('/tam', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: 'No file uploaded' });
+      return res.status(400).json({
+        success: false,
+        message: 'No file uploaded'
+      });
     }
 
-    const filePath = path.join(baseUploadPath, req.file.filename);
-    const base64Data = fs.readFileSync(filePath).toString('base64');
+    const { tamilName } = req.body;
+
+   
+
+    const file = req.file;
+    const filePath = path.join(__dirname, '..', file.path);
+    const fileBuffer = fs.readFileSync(filePath);
+    const base64Data = fileBuffer.toString('base64');
 
     const newTamilImage = new TamilImage({
-      name: req.file.filename,
-      originalName: req.file.originalname,
-      mimeType: req.file.mimetype,
-      size: req.file.size,
-      base64Data,
-      uploadPath: path.relative(path.join(__dirname, '..'), filePath)
+      name: file.filename,
+      originalName: file.originalname,
+      mimeType: file.mimetype,
+      size: file.size,
+      base64Data: base64Data,
+      uploadPath: file.path
     });
 
     const savedImage = await newTamilImage.save();
@@ -75,9 +78,11 @@ router.post('/tam', upload.single('image'), async (req, res) => {
   } catch (error) {
     console.error('Error storing Tamil image:', error);
 
-    const failedPath = path.join(baseUploadPath, req.file?.filename || '');
-    if (fs.existsSync(failedPath)) {
-      fs.unlinkSync(failedPath);
+    if (req.file) {
+      const filePath = path.join(__dirname, '..', req.file.path);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
 
     res.status(500).json({
@@ -88,10 +93,10 @@ router.post('/tam', upload.single('image'), async (req, res) => {
   }
 });
 
-// GET /api/church/tam — Fetch all Tamil images
-router.get('/tam', async (req, res) => {
-  try {
+router.get('/tam',async(req,res)=> {
+    try {
     const images = await TamilImage.find().sort({ createdAt: -1 });
+    
     res.status(200).json({
       success: true,
       count: images.length,
@@ -105,38 +110,41 @@ router.get('/tam', async (req, res) => {
       error: error.message
     });
   }
-});
+})
 
-// GET /api/church/tam/:id — Fetch single Tamil image by ID
-router.get('/tam/:id', async (req, res) => {
-  try {
-    const image = await TamilImage.findById(req.params.id);
+router.get('/tam/:id',async(req,res)=>{
+    try {
+    const { id } = req.params;
+    
+    const image = await TamilImage.findById(id);
+    
     if (!image) {
       return res.status(404).json({
         success: false,
         message: 'Tamil image not found'
       });
     }
-
+    
     res.status(200).json({
       success: true,
       data: image
     });
   } catch (error) {
     console.error('Error fetching Tamil image:', error);
+    
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
         message: 'Invalid Tamil image ID format'
       });
     }
-
+    
     res.status(500).json({
       success: false,
       message: 'Failed to fetch Tamil image',
       error: error.message
     });
   }
-});
+})
 
 module.exports = router;
