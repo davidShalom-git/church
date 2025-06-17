@@ -759,15 +759,15 @@ const Home = () => {
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                       >
-                      <img
-  src={item.base64Data ? `data:${item.mimeType};base64,${item.base64Data}` : `https://church-76ju.vercel.app/api/files/${item.name}`}
-  className="w-full h-96 object-cover transition-transform duration-700 group-hover/image:scale-110 group-hover/image:rotate-1"
-  alt={item.originalName || item.name}
-  onError={(e) => {
-    console.error('Event image failed to load:', e.target.src);
-    e.target.onerror = null;
-  }}
-/>
+                        <img
+                          src={item.base64Data ? `data:${item.mimeType};base64,${item.base64Data}` : `https://church-76ju.vercel.app/api/files/${item.name}`}
+                          className="w-full h-96 object-cover transition-transform duration-700 group-hover/image:scale-110 group-hover/image:rotate-1"
+                          alt={item.originalName || item.name}
+                          onError={(e) => {
+                            console.error('Event image failed to load:', e.target.src);
+                            e.target.onerror = null;
+                          }}
+                        />
 
                         {/* Image Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
