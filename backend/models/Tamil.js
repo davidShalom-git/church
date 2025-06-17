@@ -57,4 +57,4 @@ TamilSchema.pre('save', function(next) {
   next();
 });
 
-module.exports = mongoose.model('English', TamilSchema);
+module.exports = mongoose.model('Tamil', TamilSchema);
