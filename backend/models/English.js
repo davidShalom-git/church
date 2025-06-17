@@ -41,7 +41,7 @@ const EnglishSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true,
-  collection: 'images' // Explicitly set collection name
+  collection: 'english' // Explicitly set collection name
 });
 
 // Ensure indexes are properly set

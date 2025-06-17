@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const Image = require('../models/English.js');
+const English = require('../models/English.js');
 
 const router = express.Router();
 
@@ -43,7 +43,7 @@ router.post('/eng', upload.single('image'), async (req, res) => {
     // Convert buffer to base64
     const base64Data = file.buffer.toString('base64');
 
-    const newImage = new Image({
+    const newImage = new English({
       name: fileName,
       originalName: file.originalname,
       mimeType: file.mimetype,
@@ -80,7 +80,7 @@ router.post('/eng', upload.single('image'), async (req, res) => {
 // GET /api/images/event - Get all images
 router.get('/eng', async (req, res) => {
   try {
-    const images = await Image.find().sort({ createdAt: -1 });
+    const images = await English.find().sort({ createdAt: -1 });
     
     res.status(200).json({
       success: true,
@@ -102,7 +102,7 @@ router.get('/eng/:id', async (req, res) => {
   try {
     const { id } = req.params;
     
-    const image = await Image.findById(id);
+    const image = await English.findById(id);
     
     if (!image) {
       return res.status(404).json({
@@ -138,7 +138,7 @@ router.get('/serve/:id', async (req, res) => {
   try {
     const { id } = req.params;
     
-    const image = await Image.findById(id);
+    const image = await English.findById(id);
     
     if (!image) {
       return res.status(404).json({

@@ -41,7 +41,7 @@ const TamilSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true,
-  collection: 'images' // Explicitly set collection name
+  collection: 'tamil' // Explicitly set collection name
 });
 
 // Ensure indexes are properly set
