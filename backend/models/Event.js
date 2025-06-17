@@ -24,14 +24,37 @@ const ImageSchema = new mongoose.Schema({
   },
   uploadPath: {
     type: String,
-    required: true
+    required: false
   },
   uploadedAt: {
     type: Date,
     default: Date.now
+  },
+  // Add the problematic field that's causing the duplicate error
+  image: {
+    type: String,
+    default: function() {
+      // Generate a unique value instead of null
+      return `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    },
+    unique: true // Keep it unique but with actual unique values
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  collection: 'images' // Explicitly set collection name
+});
+
+// Ensure indexes are properly set
+ImageSchema.index({ name: 1 });
+ImageSchema.index({ uploadedAt: -1 });
+ImageSchema.index({ createdAt: -1 });
+
+// Pre-save middleware to ensure unique image field
+ImageSchema.pre('save', function(next) {
+  if (!this.image || this.image === null) {
+    this.image = `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${this._id}`;
+  }
+  next();
 });
 
 module.exports = mongoose.model('Image', ImageSchema);
