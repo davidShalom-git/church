@@ -25,36 +25,30 @@ const EnglishSchema = new mongoose.Schema({
   uploadPath: {
     type: String,
     required: false
+    // Keep this optional for backward compatibility, but it's not used in memory storage
   },
   uploadedAt: {
     type: Date,
     default: Date.now
-  },
-  // Add the problematic field that's causing the duplicate error
-  image: {
-    type: String,
-    default: function() {
-      // Generate a unique value instead of null
-      return `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    },
-    unique: true // Keep it unique but with actual unique values
   }
+  // REMOVED: The problematic 'image' field that was causing file path issues
 }, {
   timestamps: true,
-  collection: 'english' // Explicitly set collection name
+  collection: 'english'
 });
 
-// Ensure indexes are properly set
+// Indexes for better query performance
 EnglishSchema.index({ name: 1 });
 EnglishSchema.index({ uploadedAt: -1 });
 EnglishSchema.index({ createdAt: -1 });
 
-// Pre-save middleware to ensure unique image field
-EnglishSchema.pre('save', function(next) {
-  if (!this.image || this.image === null) {
-    this.image = `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${this._id}`;
-  }
-  next();
+// Virtual field for getting the image URL (optional but helpful)
+EnglishSchema.virtual('imageUrl').get(function() {
+  return `/api/english/serve/${this._id}`;
 });
+
+// Include virtual fields when converting to JSON
+EnglishSchema.set('toJSON', { virtuals: true });
+EnglishSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model('English', EnglishSchema);

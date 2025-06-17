@@ -24,7 +24,7 @@ const upload = multer({
   }
 });
 
-// POST /api/images/upload - Store image
+// POST /api/english/upload - Store image
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
@@ -77,7 +77,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-// GET /api/images/event - Get all images
+// GET /api/english/event - Get all images
 router.get('/event', async (req, res) => {
   try {
     const images = await English.find().sort({ createdAt: -1 });
@@ -97,7 +97,7 @@ router.get('/event', async (req, res) => {
   }
 });
 
-// GET /api/images/event/:id - Get single image
+// GET /api/english/event/:id - Get single image
 router.get('/event/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -133,7 +133,7 @@ router.get('/event/:id', async (req, res) => {
   }
 });
 
-// GET /api/images/serve/:id - Serve image directly
+// GET /api/english/serve/:id - Serve image directly
 router.get('/serve/:id', async (req, res) => {
   try {
     const { id } = req.params;
