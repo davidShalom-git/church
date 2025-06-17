@@ -1,23 +1,13 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
-const EnglishImage = require('../models/English.js');
+const Image = require('../models/English.js');
 
 const router = express.Router();
 
-// Configure multer storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/english/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'english-' + file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
+// Use memory storage - no file system involvement
+const storage = multer.memoryStorage();
 
-// File filter for images
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);
@@ -30,11 +20,11 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
+    fileSize: 10 * 1024 * 1024 // 10MB
   }
 });
 
-// POST /api/english-images/upload
+// POST /api/images/upload - Store image
 router.post('/eng', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
@@ -45,24 +35,28 @@ router.post('/eng', upload.single('image'), async (req, res) => {
     }
 
     const file = req.file;
-    const filePath = path.join(__dirname, '..', file.path);
-    const fileBuffer = fs.readFileSync(filePath);
-    const base64Data = fileBuffer.toString('base64');
+    
+    // Generate unique filename
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const fileName = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
+    
+    // Convert buffer to base64
+    const base64Data = file.buffer.toString('base64');
 
-    const newEnglishImage = new EnglishImage({
-      name: file.filename,
+    const newImage = new Image({
+      name: fileName,
       originalName: file.originalname,
       mimeType: file.mimetype,
       size: file.size,
       base64Data: base64Data,
-      uploadPath: file.path
+      uploadPath: `memory-${fileName}` // Placeholder path since it's required
     });
 
-    const savedImage = await newEnglishImage.save();
+    const savedImage = await newImage.save();
 
     res.status(201).json({
       success: true,
-      message: 'English image uploaded successfully',
+      message: 'Image uploaded successfully',
       data: {
         id: savedImage._id,
         name: savedImage.name,
@@ -73,26 +67,20 @@ router.post('/eng', upload.single('image'), async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error storing English image:', error);
-
-    if (req.file) {
-      const filePath = path.join(__dirname, '..', req.file.path);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
-    }
+    console.error('Error storing image:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Failed to store English image',
+      message: 'Failed to store image',
       error: error.message
     });
   }
 });
 
-router.get('/eng', async(req,res)=>{
-    try {
-    const images = await EnglishImage.find().sort({ createdAt: -1 });
+// GET /api/images/event - Get all images
+router.get('/eng', async (req, res) => {
+  try {
+    const images = await Image.find().sort({ createdAt: -1 });
     
     res.status(200).json({
       success: true,
@@ -100,25 +88,26 @@ router.get('/eng', async(req,res)=>{
       data: images
     });
   } catch (error) {
-    console.error('Error fetching English images:', error);
+    console.error('Error fetching images:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch English images',
+      message: 'Failed to fetch images',
       error: error.message
     });
   }
-})
+});
 
-router.get('/eng/:id',async (req,res)=> {
-    try {
+// GET /api/images/event/:id - Get single image
+router.get('/eng/:id', async (req, res) => {
+  try {
     const { id } = req.params;
     
-    const image = await EnglishImage.findById(id);
+    const image = await Image.findById(id);
     
     if (!image) {
       return res.status(404).json({
         success: false,
-        message: 'English image not found'
+        message: 'Image not found'
       });
     }
     
@@ -127,21 +116,52 @@ router.get('/eng/:id',async (req,res)=> {
       data: image
     });
   } catch (error) {
-    console.error('Error fetching English image:', error);
+    console.error('Error fetching image:', error);
     
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
-        message: 'Invalid English image ID format'
+        message: 'Invalid image ID format'
       });
     }
     
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch English image',
+      message: 'Failed to fetch image',
       error: error.message
     });
   }
-})
+});
+
+// GET /api/images/serve/:id - Serve image directly
+router.get('/serve/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const image = await Image.findById(id);
+    
+    if (!image) {
+      return res.status(404).json({
+        success: false,
+        message: 'Image not found'
+      });
+    }
+    
+    // Convert base64 back to buffer and serve
+    const imageBuffer = Buffer.from(image.base64Data, 'base64');
+    
+    res.setHeader('Content-Type', image.mimeType);
+    res.setHeader('Content-Length', imageBuffer.length);
+    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+    res.send(imageBuffer);
+  } catch (error) {
+    console.error('Error serving image:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to serve image',
+      error: error.message
+    });
+  }
+});
 
 module.exports = router;
