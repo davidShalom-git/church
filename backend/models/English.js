@@ -23,14 +23,8 @@ const EnglishSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  base64Hash: {
-    type: String,
-    required: true,
-    index: true // For fast lookup
-  },
   uploadPath: {
-    type: String,
-    required: false
+    type: String
   },
   uploadedAt: {
     type: Date,
@@ -41,7 +35,7 @@ const EnglishSchema = new mongoose.Schema({
   collection: 'english'
 });
 
-// Virtual URL field
+// Optional virtual field to serve images via route
 EnglishSchema.virtual('imageUrl').get(function () {
   return `/api/english/serve/${this._id}`;
 });

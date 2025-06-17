@@ -34,22 +34,8 @@ router.post('/eng', upload.single('image'), async (req, res) => {
     }
 
     const file = req.file;
-
-    // Generate hash from file buffer
-    const fileHash = crypto.createHash('md5').update(file.buffer).digest('hex');
-
-    // Check for duplicate image content
-    const existingImage = await English.findOne({ base64Hash: fileHash });
-    if (existingImage) {
-      return res.status(400).json({
-        success: false,
-        message: 'Duplicate image not allowed'
-      });
-    }
-
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const fileName = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
-
     const base64Data = file.buffer.toString('base64');
 
     const newImage = new English({
@@ -58,7 +44,6 @@ router.post('/eng', upload.single('image'), async (req, res) => {
       mimeType: file.mimetype,
       size: file.size,
       base64Data: base64Data,
-      base64Hash: fileHash,
       uploadPath: `memory-${fileName}`
     });
 
