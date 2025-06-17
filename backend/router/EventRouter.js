@@ -1,10 +1,11 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
 const Image = require('../models/Event.js');
 
 const router = express.Router();
 
-// Configure multer for memory storage (no file system)
+// Use memory storage - no file system involvement
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
@@ -23,7 +24,7 @@ const upload = multer({
   }
 });
 
-// POST /api/images/upload - Store image directly in database
+// POST /api/images/upload - Store image
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
@@ -34,14 +35,21 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     }
 
     const file = req.file;
+    
+    // Generate unique filename
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const fileName = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
+    
+    // Convert buffer to base64
     const base64Data = file.buffer.toString('base64');
 
     const newImage = new Image({
-      name: `${Date.now()}-${Math.round(Math.random() * 1E9)}-${file.originalname}`,
+      name: fileName,
       originalName: file.originalname,
       mimeType: file.mimetype,
       size: file.size,
-      base64Data: base64Data
+      base64Data: base64Data,
+      uploadPath: `memory-${fileName}` // Placeholder path since it's required
     });
 
     const savedImage = await newImage.save();
@@ -68,8 +76,10 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     });
   }
 });
-router.get('/event',async (req,res)=> {
-     try {
+
+// GET /api/images/event - Get all images
+router.get('/event', async (req, res) => {
+  try {
     const images = await Image.find().sort({ createdAt: -1 });
     
     res.status(200).json({
@@ -85,10 +95,11 @@ router.get('/event',async (req,res)=> {
       error: error.message
     });
   }
-})
+});
 
-router.get('/event/:id', async (req,res)=> {
-    try {
+// GET /api/images/event/:id - Get single image
+router.get('/event/:id', async (req, res) => {
+  try {
     const { id } = req.params;
     
     const image = await Image.findById(id);
@@ -120,7 +131,37 @@ router.get('/event/:id', async (req,res)=> {
       error: error.message
     });
   }
-})
+});
 
+// GET /api/images/serve/:id - Serve image directly
+router.get('/serve/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const image = await Image.findById(id);
+    
+    if (!image) {
+      return res.status(404).json({
+        success: false,
+        message: 'Image not found'
+      });
+    }
+    
+    // Convert base64 back to buffer and serve
+    const imageBuffer = Buffer.from(image.base64Data, 'base64');
+    
+    res.setHeader('Content-Type', image.mimeType);
+    res.setHeader('Content-Length', imageBuffer.length);
+    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+    res.send(imageBuffer);
+  } catch (error) {
+    console.error('Error serving image:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to serve image',
+      error: error.message
+    });
+  }
+});
 
 module.exports = router;
