@@ -25,7 +25,7 @@ const upload = multer({
 });
 
 // POST /api/tamil/upload - Store image
-router.post('/upload', upload.single('image'), async (req, res) => {
+router.post('/tam', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -78,7 +78,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
 });
 
 // GET /api/tamil/event - Get all images
-router.get('/event', async (req, res) => {
+router.get('/tam', async (req, res) => {
   try {
     const images = await Tamil.find().sort({ createdAt: -1 });
     
@@ -98,7 +98,7 @@ router.get('/event', async (req, res) => {
 });
 
 // GET /api/tamil/event/:id - Get single image
-router.get('/event/:id', async (req, res) => {
+router.get('/tam/:id', async (req, res) => {
   try {
     const { id } = req.params;
     
