@@ -1,11 +1,12 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const English = require('../models/English.js');
+const crypto = require('crypto');
+const English = require('../models/English');
 
 const router = express.Router();
 
-// Use memory storage - no file system involvement
+// Memory storage (no files saved to disk)
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
@@ -19,12 +20,10 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB
-  }
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
-// POST /api/english/upload - Store image
+// Upload Route
 router.post('/eng', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
@@ -35,12 +34,22 @@ router.post('/eng', upload.single('image'), async (req, res) => {
     }
 
     const file = req.file;
-    
-    // Generate unique filename
+
+    // Generate hash from file buffer
+    const fileHash = crypto.createHash('md5').update(file.buffer).digest('hex');
+
+    // Check for duplicate image content
+    const existingImage = await English.findOne({ base64Hash: fileHash });
+    if (existingImage) {
+      return res.status(400).json({
+        success: false,
+        message: 'Duplicate image not allowed'
+      });
+    }
+
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const fileName = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
-    
-    // Convert buffer to base64
+
     const base64Data = file.buffer.toString('base64');
 
     const newImage = new English({
@@ -49,7 +58,8 @@ router.post('/eng', upload.single('image'), async (req, res) => {
       mimeType: file.mimetype,
       size: file.size,
       base64Data: base64Data,
-      uploadPath: `memory-${fileName}` // Placeholder path since it's required
+      base64Hash: fileHash,
+      uploadPath: `memory-${fileName}`
     });
 
     const savedImage = await newImage.save();
@@ -67,15 +77,15 @@ router.post('/eng', upload.single('image'), async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Error storing image:', error);
-
+    console.error('Error uploading image:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to store image',
+      message: 'Failed to upload image',
       error: error.message
     });
   }
 });
+
 
 // GET /api/english/event - Get all images
 router.get('/eng', async (req, res) => {

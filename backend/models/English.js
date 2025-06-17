@@ -8,7 +8,8 @@ const EnglishSchema = new mongoose.Schema({
   },
   originalName: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   mimeType: {
     type: String,
@@ -22,33 +23,30 @@ const EnglishSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  base64Hash: {
+    type: String,
+    required: true,
+    index: true // For fast lookup
+  },
   uploadPath: {
     type: String,
     required: false
-    // Keep this optional for backward compatibility, but it's not used in memory storage
   },
   uploadedAt: {
     type: Date,
     default: Date.now
   }
-  // REMOVED: The problematic 'image' field that was causing file path issues
 }, {
   timestamps: true,
   collection: 'english'
 });
 
-// Indexes for better query performance
-EnglishSchema.index({ name: 1 });
-EnglishSchema.index({ uploadedAt: -1 });
-EnglishSchema.index({ createdAt: -1 });
-
-// Virtual field for getting the image URL (optional but helpful)
-EnglishSchema.virtual('imageUrl').get(function() {
+// Virtual URL field
+EnglishSchema.virtual('imageUrl').get(function () {
   return `/api/english/serve/${this._id}`;
 });
 
-// Include virtual fields when converting to JSON
 EnglishSchema.set('toJSON', { virtuals: true });
 EnglishSchema.set('toObject', { virtuals: true });
 
-module.exports = mongoose.model('English', EnglishSchema);
+module.exports = mongoose.models.English || mongoose.model('English', EnglishSchema);
