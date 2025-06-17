@@ -29,18 +29,10 @@ const EnglishSchema = new mongoose.Schema({
   uploadedAt: {
     type: Date,
     default: Date.now
-  },
-  // Add the problematic field that's causing the duplicate error
-  image: {
-    type: String,
-    default: function() {
-      // Generate a unique value instead of null
-      return `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    },
-    unique: true // Keep it unique but with actual unique values
   }
+  // Removed the 'image' field since it's not used in the router
 }, {
-  timestamps: true,
+  timestamps: true, // This adds createdAt and updatedAt automatically
   collection: 'english' // Explicitly set collection name
 });
 
@@ -48,13 +40,5 @@ const EnglishSchema = new mongoose.Schema({
 EnglishSchema.index({ name: 1 });
 EnglishSchema.index({ uploadedAt: -1 });
 EnglishSchema.index({ createdAt: -1 });
-
-// Pre-save middleware to ensure unique image field
-EnglishSchema.pre('save', function(next) {
-  if (!this.image || this.image === null) {
-    this.image = `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${this._id}`;
-  }
-  next();
-});
 
 module.exports = mongoose.model('English', EnglishSchema);

@@ -24,7 +24,7 @@ const upload = multer({
   }
 });
 
-// POST /api/images/eng - Upload an image
+// POST /api/images/eng - Store image
 router.post('/eng', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
@@ -35,11 +35,11 @@ router.post('/eng', upload.single('image'), async (req, res) => {
     }
 
     const file = req.file;
-
+    
     // Generate unique filename
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const fileName = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
-
+    
     // Convert buffer to base64
     const base64Data = file.buffer.toString('base64');
 
@@ -49,8 +49,7 @@ router.post('/eng', upload.single('image'), async (req, res) => {
       mimeType: file.mimetype,
       size: file.size,
       base64Data: base64Data,
-      uploadPath: `memory-${fileName}`,
-      image: `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` // Explicitly setting image field
+      uploadPath: `memory-${fileName}` // Placeholder path since it's required
     });
 
     const savedImage = await newImage.save();
@@ -69,6 +68,7 @@ router.post('/eng', upload.single('image'), async (req, res) => {
     });
   } catch (error) {
     console.error('Error storing image:', error);
+
     res.status(500).json({
       success: false,
       message: 'Failed to store image',
@@ -77,11 +77,11 @@ router.post('/eng', upload.single('image'), async (req, res) => {
   }
 });
 
-// GET /api/images/eng - Retrieve all images
+// GET /api/images/eng - Get all images
 router.get('/eng', async (req, res) => {
   try {
-    const images = await English.find().sort({ uploadedAt: -1 });
-
+    const images = await English.find().sort({ createdAt: -1 });
+    
     res.status(200).json({
       success: true,
       count: images.length,
@@ -97,34 +97,34 @@ router.get('/eng', async (req, res) => {
   }
 });
 
-// GET /api/images/eng/:id - Retrieve a single image
+// GET /api/images/eng/:id - Get single image
 router.get('/eng/:id', async (req, res) => {
   try {
     const { id } = req.params;
-
+    
     const image = await English.findById(id);
-
+    
     if (!image) {
       return res.status(404).json({
         success: false,
         message: 'Image not found'
       });
     }
-
+    
     res.status(200).json({
       success: true,
       data: image
     });
   } catch (error) {
     console.error('Error fetching image:', error);
-
+    
     if (error.name === 'CastError') {
       return res.status(400).json({
         success: false,
         message: 'Invalid image ID format'
       });
     }
-
+    
     res.status(500).json({
       success: false,
       message: 'Failed to fetch image',
@@ -137,19 +137,19 @@ router.get('/eng/:id', async (req, res) => {
 router.get('/serve/:id', async (req, res) => {
   try {
     const { id } = req.params;
-
+    
     const image = await English.findById(id);
-
+    
     if (!image) {
       return res.status(404).json({
         success: false,
         message: 'Image not found'
       });
     }
-
+    
     // Convert base64 back to buffer and serve
     const imageBuffer = Buffer.from(image.base64Data, 'base64');
-
+    
     res.setHeader('Content-Type', image.mimeType);
     res.setHeader('Content-Length', imageBuffer.length);
     res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
