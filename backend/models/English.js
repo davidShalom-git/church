@@ -33,7 +33,13 @@ const EnglishSchema = new mongoose.Schema({
 
 // Ensure indexes are properly set for efficient queries
 EnglishSchema.index({ name: 1 });
+EnglishSchema.index({ originalName: 1 });
+EnglishSchema.index({ mimeType: 1 });
 EnglishSchema.index({ uploadedAt: -1 });
 EnglishSchema.index({ createdAt: -1 });
+
+// Exclude `base64Data` from default queries for performance
+EnglishSchema.set('toJSON', { transform: (doc, ret) => { delete ret.base64Data; return ret; } });
+EnglishSchema.set('toObject', { transform: (doc, ret) => { delete ret.base64Data; return ret; } });
 
 module.exports = mongoose.model('English', EnglishSchema);

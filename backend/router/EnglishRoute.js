@@ -24,8 +24,8 @@ const upload = multer({
   }
 });
 
-// POST /api/images/eng - Upload an image
-router.post('/eng', upload.single('image'), async (req, res) => {
+// POST /api/images/upload - Store image
+router.post('/upload', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ success: false, message: 'No file uploaded' });
@@ -45,7 +45,7 @@ router.post('/eng', upload.single('image'), async (req, res) => {
       originalName: file.originalname,
       mimeType: file.mimetype,
       size: file.size,
-      base64Data: base64Data // Ensure proper memory storage
+      base64Data: base64Data
     });
 
     const savedImage = await newImage.save();
@@ -68,8 +68,8 @@ router.post('/eng', upload.single('image'), async (req, res) => {
   }
 });
 
-// GET /api/images/eng - Retrieve all images
-router.get('/eng', async (req, res) => {
+// GET /api/images/english - Get all images
+router.get('/english', async (req, res) => {
   try {
     const images = await English.find().sort({ uploadedAt: -1 });
 
@@ -80,8 +80,8 @@ router.get('/eng', async (req, res) => {
   }
 });
 
-// GET /api/images/eng/:id - Retrieve a single image
-router.get('/eng/:id', async (req, res) => {
+// GET /api/images/english/:id - Get single image
+router.get('/english/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const image = await English.findById(id);
@@ -93,11 +93,9 @@ router.get('/eng/:id', async (req, res) => {
     res.status(200).json({ success: true, data: image });
   } catch (error) {
     console.error('Error fetching image:', error);
-
     if (error.name === 'CastError') {
       return res.status(400).json({ success: false, message: 'Invalid image ID format' });
     }
-
     res.status(500).json({ success: false, message: 'Failed to fetch image', error: error.message });
   }
 });

@@ -22,23 +22,24 @@ const TamilSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  uploadPath: {
-    type: String,
-    required: false
-  },
   uploadedAt: {
     type: Date,
     default: Date.now
   }
-  // Removed the 'image' field since it's not used in the router
 }, {
-  timestamps: true, // This adds createdAt and updatedAt automatically
+  timestamps: true, // Automatically adds createdAt and updatedAt fields
   collection: 'tamil' // Explicitly set collection name
 });
 
-// Ensure indexes are properly set
+// Ensure indexes are properly set for efficient queries
 TamilSchema.index({ name: 1 });
+TamilSchema.index({ originalName: 1 });
+TamilSchema.index({ mimeType: 1 });
 TamilSchema.index({ uploadedAt: -1 });
 TamilSchema.index({ createdAt: -1 });
+
+// Exclude `base64Data` from default queries for performance
+TamilSchema.set('toJSON', { transform: (doc, ret) => { delete ret.base64Data; return ret; } });
+TamilSchema.set('toObject', { transform: (doc, ret) => { delete ret.base64Data; return ret; } });
 
 module.exports = mongoose.model('Tamil', TamilSchema);
