@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const Tamil = require('../models/Tamil.js'); // Correct model reference
+const Tamil = require('../models/Tamil.js');
 
 const router = express.Router();
 
@@ -28,15 +28,18 @@ const upload = multer({
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: 'No file uploaded' });
+      return res.status(400).json({
+        success: false,
+        message: 'No file uploaded'
+      });
     }
 
     const file = req.file;
-
+    
     // Generate unique filename
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const fileName = file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname);
-
+    
     // Convert buffer to base64
     const base64Data = file.buffer.toString('base64');
 
@@ -45,7 +48,8 @@ router.post('/upload', upload.single('image'), async (req, res) => {
       originalName: file.originalname,
       mimeType: file.mimetype,
       size: file.size,
-      base64Data: base64Data
+      base64Data: base64Data,
+      uploadPath: `memory-${fileName}` // Placeholder path since it's required
     });
 
     const savedImage = await newImage.save();
@@ -64,39 +68,68 @@ router.post('/upload', upload.single('image'), async (req, res) => {
     });
   } catch (error) {
     console.error('Error storing image:', error);
-    res.status(500).json({ success: false, message: 'Failed to store image', error: error.message });
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to store image',
+      error: error.message
+    });
   }
 });
 
-// GET /api/images/tamil - Get all images
-router.get('/tamil', async (req, res) => {
+// GET /api/images/event - Get all images
+router.get('/event', async (req, res) => {
   try {
-    const images = await Tamil.find().sort({ uploadedAt: -1 });
-
-    res.status(200).json({ success: true, count: images.length, data: images });
+    const images = await Tamil.find().sort({ createdAt: -1 });
+    
+    res.status(200).json({
+      success: true,
+      count: images.length,
+      data: images
+    });
   } catch (error) {
     console.error('Error fetching images:', error);
-    res.status(500).json({ success: false, message: 'Failed to fetch images', error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch images',
+      error: error.message
+    });
   }
 });
 
-// GET /api/images/tamil/:id - Get single image
-router.get('/tamil/:id', async (req, res) => {
+// GET /api/images/event/:id - Get single image
+router.get('/event/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    
     const image = await Tamil.findById(id);
-
+    
     if (!image) {
-      return res.status(404).json({ success: false, message: 'Image not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Image not found'
+      });
     }
-
-    res.status(200).json({ success: true, data: image });
+    
+    res.status(200).json({
+      success: true,
+      data: image
+    });
   } catch (error) {
     console.error('Error fetching image:', error);
+    
     if (error.name === 'CastError') {
-      return res.status(400).json({ success: false, message: 'Invalid image ID format' });
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid image ID format'
+      });
     }
-    res.status(500).json({ success: false, message: 'Failed to fetch image', error: error.message });
+    
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch image',
+      error: error.message
+    });
   }
 });
 
@@ -104,22 +137,30 @@ router.get('/tamil/:id', async (req, res) => {
 router.get('/serve/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    
     const image = await Tamil.findById(id);
-
+    
     if (!image) {
-      return res.status(404).json({ success: false, message: 'Image not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Image not found'
+      });
     }
-
+    
     // Convert base64 back to buffer and serve
     const imageBuffer = Buffer.from(image.base64Data, 'base64');
-
+    
     res.setHeader('Content-Type', image.mimeType);
     res.setHeader('Content-Length', imageBuffer.length);
     res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
     res.send(imageBuffer);
   } catch (error) {
     console.error('Error serving image:', error);
-    res.status(500).json({ success: false, message: 'Failed to serve image', error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to serve image',
+      error: error.message
+    });
   }
 });
 

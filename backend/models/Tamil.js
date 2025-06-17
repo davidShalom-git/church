@@ -22,24 +22,39 @@ const TamilSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  uploadPath: {
+    type: String,
+    required: false
+  },
   uploadedAt: {
     type: Date,
     default: Date.now
+  },
+  // Add the problematic field that's causing the duplicate error
+  image: {
+    type: String,
+    default: function() {
+      // Generate a unique value instead of null
+      return `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    },
+    unique: true // Keep it unique but with actual unique values
   }
 }, {
-  timestamps: true, // Automatically adds createdAt and updatedAt fields
+  timestamps: true,
   collection: 'tamil' // Explicitly set collection name
 });
 
-// Ensure indexes are properly set for efficient queries
+// Ensure indexes are properly set
 TamilSchema.index({ name: 1 });
-TamilSchema.index({ originalName: 1 });
-TamilSchema.index({ mimeType: 1 });
 TamilSchema.index({ uploadedAt: -1 });
 TamilSchema.index({ createdAt: -1 });
 
-// Exclude `base64Data` from default queries for performance
-TamilSchema.set('toJSON', { transform: (doc, ret) => { delete ret.base64Data; return ret; } });
-TamilSchema.set('toObject', { transform: (doc, ret) => { delete ret.base64Data; return ret; } });
+// Pre-save middleware to ensure unique image field
+TamilSchema.pre('save', function(next) {
+  if (!this.image || this.image === null) {
+    this.image = `img_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${this._id}`;
+  }
+  next();
+});
 
 module.exports = mongoose.model('Tamil', TamilSchema);
