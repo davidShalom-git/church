@@ -74,7 +74,7 @@ const Morning = () => {
 
       {/* Video Links Section */}
       <div className="mt-12 flex flex-col flex-grow">
-        <div className="flex-grow flex items-center justify-center px-4">
+        <div className="flex-grow flex items-center justify-center px-4 mb-10">
           {loading ? (
             <motion.div
               initial={{ opacity: 0 }}
