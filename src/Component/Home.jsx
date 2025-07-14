@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Calendar, Globe, ChevronDown, Play, Users, Moon, Sun, Phone } from "lucide-react";
+import { Menu, X, Calendar, Globe, ChevronDown, Play, Users, Moon, Sun, Phone, Instagram, Youtube } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Footer from './Footer';
 import logo from "../assets/galaxy.png";
@@ -1109,7 +1109,7 @@ const Home = () => {
           </motion.section>
         </div>
 
-        <div className="bg-white shadow-lg rounded-lg mb-20 p-8 w-full max-w-md mx-auto">
+       <div className="bg-white shadow-lg rounded-lg mb-20 p-8 w-full max-w-md mx-auto">
           <div className="border-b pb-4 mb-6">
             <h1 className="text-center text-3xl font-bold text-blue-700">ஜெப உதவிக்காக</h1>
           </div>
@@ -1117,21 +1117,20 @@ const Home = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-center gap-3">
               <Phone size={20} className="text-blue-600" />
-              <h2 className="text-center text-lg font-medium">+91 12323232</h2>
+              <h2 className="text-center text-lg font-medium">+91 8973037151</h2>
             </div>
 
-            <div className="flex items-center justify-center gap-3">
-              <Phone size={20} className="text-blue-600" />
-              <h2 className="text-center text-lg font-medium">+91 12323232</h2>
+            <div className='flex justify-center items-center gap-5 mx-auto'>
+              <Link to='https://www.instagram.com/revival_prayer_house?igsh=NzE3cDV3cWM1eWZ2'>
+                <Instagram size={24} className="text-blue-600 " />
+              </Link>
+              <Link to='https://www.youtube.com/@vijayforrevival8513'>
+                  <Youtube size={24} className="text-blue-600 " />
+              </Link>
             </div>
 
-            <div className="flex items-center justify-center gap-3">
-              <Phone size={20} className="text-blue-600" />
-              <h2 className="text-center text-lg font-medium">+91 12323232</h2>
-            </div>
           </div>
         </div>
-
 
         {/* Footer */}
         <Footer darkMode={darkMode} />
