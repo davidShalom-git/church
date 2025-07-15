@@ -10,7 +10,9 @@ const Morning = () => {
     fetch('https://church-data.vercel.app/upload/data/url')
       .then((response) => response.json())
       .then((data) => {
+        console.log('Fetched data:', data);
         setVideos(data);
+
         setLoading(false);
       })
       .catch((error) => {
