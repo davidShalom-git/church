@@ -123,30 +123,52 @@ const Home = () => {
     fetchImage();  // Fetch event images
   }, []);
 
-  // Upcoming events data
 
-  // ...existing code...
-  // Use base64 data directly since file URLs are not working
   const upcomingEvents = [
     {
       date: "தமிழ்",
       images: tamImage
-        .filter(img => img && (img.base64Data || img.name)) // Filter out items without image data
+        .filter(img => img && (img.base64Data || img.name))
         .map(img => ({
-          url: img.base64Data ? `data:${img.mimeType};base64,${img.base64Data}` : `https://church-76ju.vercel.app/api/files/${img.name}`,
+          url: img.base64Data
+            ? `data:${img.mimeType};base64,${img.base64Data}`
+            : `https://church-76ju.vercel.app/api/files/${img.name}`,
           date: new Date(img.createdAt).toLocaleDateString()
-        }))
+        })),
+      audios: audioTam
+        ?.filter(audio => audio && audio.url)
+        .map(audio => ({
+          url: audio.url,
+          title: audio.title,
+          artist: audio.artist,
+          album: audio.album,
+          duration: audio.duration,
+          uploadDate: new Date(audio.uploadDate).toLocaleDateString()
+        })) || []
     },
     {
       date: "English",
       images: engImage
-        .filter(img => img && (img.base64Data || img.name)) // Filter out items without image data
+        .filter(img => img && (img.base64Data || img.name))
         .map(img => ({
-          url: img.base64Data ? `data:${img.mimeType};base64,${img.base64Data}` : `https://church-76ju.vercel.app/api/files/${img.name}`,
+          url: img.base64Data
+            ? `data:${img.mimeType};base64,${img.base64Data}`
+            : `https://church-76ju.vercel.app/api/files/${img.name}`,
           date: new Date(img.createdAt).toLocaleDateString()
-        }))
+        })),
+      audios: audioEng
+        ?.filter(audio => audio && audio.url)
+        .map(audio => ({
+          url: audio.url,
+          title: audio.title,
+          artist: audio.artist,
+          album: audio.album,
+          duration: audio.duration,
+          uploadDate: new Date(audio.uploadDate).toLocaleDateString()
+        })) || []
     }
   ];
+
   // ...existing code...
 
   // Testimonials data
@@ -617,7 +639,7 @@ const Home = () => {
           {/* Three Pillars Section with enhanced design */}
 
 
-          {/* Upcoming Events Section with animations */}
+
           <section className="py-16 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-900 dark:to-gray-800">
             <div className="max-w-7xl mx-auto px-4">
               <motion.div
@@ -629,10 +651,9 @@ const Home = () => {
               >
                 <h2 className="inline-block text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
                   தினசரி தியானம் மற்றும் வாக்குத்தத்தங்கள்
-
                 </h2>
-
               </motion.div>
+
 
               <div className="grid md:grid-cols-2 gap-6 justify-center">
                 {upcomingEvents.map((event, index) => (
@@ -665,8 +686,7 @@ const Home = () => {
                                 src={image.url}
                                 className='h-[500px] w-full object-contain'
                                 alt={`${event.date} ${imgIndex + 1}`}
-                                onError={(e) => {
-                                  console.error('Image failed to load:', image.url);
+                                onError={e => {
                                   e.target.onerror = null;
                                   e.target.src = index === 0 ? wordT : wordE;
                                 }}
@@ -682,10 +702,44 @@ const Home = () => {
                           No images available
                         </div>
                       )}
+
+                      {/* Audio Section */}
+                      <div className="mt-6">
+                        <h4 className="text-lg font-semibold text-indigo-700 mb-3 text-center">
+                          Audio Files
+                        </h4>
+                        {event.audios && event.audios.length > 0 ? (
+                          <div className="space-y-4">
+                            {event.audios.map((audio, audioIdx) => (
+                              <div key={audioIdx} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 flex flex-col gap-2">
+                                <div>
+                                  <span className="font-medium">{audio.title}</span>
+                                  {audio.artist && <span className="ml-2 text-sm text-gray-500">by {audio.artist}</span>}
+                                  {audio.album && <span className="ml-2 text-sm text-gray-400">(Album: {audio.album})</span>}
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  Uploaded: {audio.uploadDate}
+                                  {audio.duration &&
+                                    <> | {Math.floor(audio.duration / 60)}:{(audio.duration % 60).toString().padStart(2, "0")} min</>
+                                  }
+                                </div>
+                                <audio controls className="w-full">
+                                  <source src={audio.url} type="audio/mpeg" />
+                                  Your browser does not support the audio element.
+                                </audio>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-gray-400 text-center">No audio files available</div>
+                        )}
+                      </div>
                     </div>
                   </motion.div>
                 ))}
               </div>
+
+
               <motion.div
                 className="text-center mt-10 flex justify-center"
                 initial={{ opacity: 0, y: 20 }}
@@ -703,8 +757,6 @@ const Home = () => {
                   </Link>
                 </motion.div>
               </motion.div>
-
-
             </div>
           </section>
 
@@ -1110,64 +1162,64 @@ const Home = () => {
           </motion.section>
         </div>
 
-      <div className="bg-gradient-to-r from-white to-blue-50 dark:from-gray-800 dark:to-gray-900 shadow-2xl rounded-xl mb-20 p-8 w-full max-w-md mx-auto transform hover:scale-105 transition-all duration-300">
-  <div className="border-b border-blue-200 dark:border-gray-700 pb-4 mb-6">
-    <h1 className="text-center text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-      ஜெப உதவிக்காக
-    </h1>
-  </div>
-
-  <div className="space-y-6">
-    {/* Phone Number */}
-    <motion.div 
-      className="flex items-center justify-center gap-3 p-4 bg-blue-50 dark:bg-gray-800 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700 transition-all duration-300"
-      whileHover={{ scale: 1.02 }}
-    >
-      <div className="p-2 bg-blue-500 rounded-full">
-        <Phone size={20} className="text-white" />
-      </div>
-      <h2 className="text-center text-lg font-medium text-gray-800 dark:text-gray-200">
-        +91 8973037151
-      </h2>
-    </motion.div>
-
-    {/* Social Links */}
-    <div className="flex flex-col gap-4">
-      {/* Instagram */}
-      <motion.div whileHover={{ scale: 1.02 }}>
-        <Link 
-          to="https://www.instagram.com/revival_prayer_house?igsh=NzE3cDV3cWM1eWZ2"
-          className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-800 dark:to-gray-700 rounded-lg hover:shadow-md transition-all duration-300"
-        >
-          <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full">
-            <Instagram size={20} className="text-white" />
+        <div className="bg-gradient-to-r from-white to-blue-50 dark:from-gray-800 dark:to-gray-900 shadow-2xl rounded-xl mb-20 p-8 w-full max-w-md mx-auto transform hover:scale-105 transition-all duration-300">
+          <div className="border-b border-blue-200 dark:border-gray-700 pb-4 mb-6">
+            <h1 className="text-center text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              ஜெப உதவிக்காக
+            </h1>
           </div>
-          <span className="font-medium text-gray-700 dark:text-gray-300">
-            revival_prayer_house
-          </span>
-        </Link>
-      </motion.div>
 
-      {/* YouTube */}
-      <motion.div whileHover={{ scale: 1.02 }}>
-        <Link 
-          to="https://www.youtube.com/@vijayforrevival8513"
-          className="flex items-center gap-3 p-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-800 dark:to-gray-700 rounded-lg hover:shadow-md transition-all duration-300"
-        >
-          <div className="p-2 bg-gradient-to-r from-red-500 to-red-600 rounded-full">
-            <Youtube size={20} className="text-white" />
+          <div className="space-y-6">
+            {/* Phone Number */}
+            <motion.div
+              className="flex items-center justify-center gap-3 p-4 bg-blue-50 dark:bg-gray-800 rounded-lg hover:bg-blue-100 dark:hover:bg-gray-700 transition-all duration-300"
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="p-2 bg-blue-500 rounded-full">
+                <Phone size={20} className="text-white" />
+              </div>
+              <h2 className="text-center text-lg font-medium text-gray-800 dark:text-gray-200">
+                +91 8973037151
+              </h2>
+            </motion.div>
+
+            {/* Social Links */}
+            <div className="flex flex-col gap-4">
+              {/* Instagram */}
+              <motion.div whileHover={{ scale: 1.02 }}>
+                <Link
+                  to="https://www.instagram.com/revival_prayer_house?igsh=NzE3cDV3cWM1eWZ2"
+                  className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-800 dark:to-gray-700 rounded-lg hover:shadow-md transition-all duration-300"
+                >
+                  <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full">
+                    <Instagram size={20} className="text-white" />
+                  </div>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">
+                    revival_prayer_house
+                  </span>
+                </Link>
+              </motion.div>
+
+              {/* YouTube */}
+              <motion.div whileHover={{ scale: 1.02 }}>
+                <Link
+                  to="https://www.youtube.com/@vijayforrevival8513"
+                  className="flex items-center gap-3 p-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-800 dark:to-gray-700 rounded-lg hover:shadow-md transition-all duration-300"
+                >
+                  <div className="p-2 bg-gradient-to-r from-red-500 to-red-600 rounded-full">
+                    <Youtube size={20} className="text-white" />
+                  </div>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">
+                    vijayforrevival
+                  </span>
+                </Link>
+              </motion.div>
+            </div>
           </div>
-          <span className="font-medium text-gray-700 dark:text-gray-300">
-            vijayforrevival
-          </span>
-        </Link>
-      </motion.div>
-    </div>
-  </div>
 
-  {/* Decorative Elements */}
-  <div className="absolute -z-10 inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5 rounded-xl blur-xl"></div>
-</div>
+          {/* Decorative Elements */}
+          <div className="absolute -z-10 inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5 rounded-xl blur-xl"></div>
+        </div>
 
         {/* Footer */}
         <Footer darkMode={darkMode} />
