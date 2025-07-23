@@ -123,51 +123,90 @@ const Home = () => {
     fetchImage();  // Fetch event images
   }, []);
 
+  const [audioTam, setAudioTam] = useState([]);
+const [audioEng, setAudioEng] = useState([]);
+const [audioLoading, setAudioLoading] = useState(true);
 
-  const upcomingEvents = [
-    {
-      date: "தமிழ்",
-      images: tamImage
-        .filter(img => img && (img.base64Data || img.name))
-        .map(img => ({
-          url: img.base64Data
-            ? `data:${img.mimeType};base64,${img.base64Data}`
-            : `https://church-76ju.vercel.app/api/files/${img.name}`,
-          date: new Date(img.createdAt).toLocaleDateString()
-        })),
-      audios: audioTam
-        ?.filter(audio => audio && audio.url)
-        .map(audio => ({
-          url: audio.url,
-          title: audio.title,
-          artist: audio.artist,
-          album: audio.album,
-          duration: audio.duration,
-          uploadDate: new Date(audio.uploadDate).toLocaleDateString()
-        })) || []
-    },
-    {
-      date: "English",
-      images: engImage
-        .filter(img => img && (img.base64Data || img.name))
-        .map(img => ({
-          url: img.base64Data
-            ? `data:${img.mimeType};base64,${img.base64Data}`
-            : `https://church-76ju.vercel.app/api/files/${img.name}`,
-          date: new Date(img.createdAt).toLocaleDateString()
-        })),
-      audios: audioEng
-        ?.filter(audio => audio && audio.url)
-        .map(audio => ({
-          url: audio.url,
-          title: audio.title,
-          artist: audio.artist,
-          album: audio.album,
-          duration: audio.duration,
-          uploadDate: new Date(audio.uploadDate).toLocaleDateString()
-        })) || []
+// Add this useEffect to fetch audio data
+useEffect(() => {
+  const fetchAudioData = async () => {
+    try {
+      setAudioLoading(true);
+      const response = await fetch('your-api-endpoint/upload/data/audio'); // Replace with your actual endpoint
+      const audioData = await response.json();
+      
+      // Filter Tamil and English audio based on your criteria
+      // Assuming you have a language field or some way to distinguish
+      const tamilAudio = audioData.filter(audio => audio.language === 'tamil' || audio.type === 'tamil');
+      const englishAudio = audioData.filter(audio => audio.language === 'english' || audio.type === 'english');
+      
+      setAudioTam(tamilAudio);
+      setAudioEng(englishAudio);
+    } catch (error) {
+      console.error('Error fetching audio data:', error);
+      setAudioTam([]);
+      setAudioEng([]);
+    } finally {
+      setAudioLoading(false);
     }
-  ];
+  };
+
+  fetchAudioData();
+}, []);
+
+
+const upcomingEvents = [
+  {
+    date: "தமிழ்",
+    images: tamImage
+      .filter(img => img && (img.base64Data || img.name))
+      .map(img => ({
+        url: img.base64Data
+          ? `data:${img.mimeType};base64,${img.base64Data}`
+          : `https://church-76ju.vercel.app/api/files/${img.name}`,
+        date: new Date(img.createdAt).toLocaleDateString()
+      })),
+    audios: (audioTam && Array.isArray(audioTam))
+      ? audioTam
+          .filter(audio => audio && audio.url)
+          .map(audio => ({
+            url: audio.hasBase64Data 
+              ? `https://church-76ju.vercel.app/upload/data/audio-stream/${audio._id}` 
+              : audio.url,
+            title: audio.title || 'Untitled',
+            artist: audio.artist || '',
+            album: audio.album || '',
+            duration: audio.duration || 0,
+            uploadDate: new Date(audio.uploadDate || audio.createdAt).toLocaleDateString()
+          }))
+      : []
+  },
+  {
+    date: "English",
+    images: engImage
+      .filter(img => img && (img.base64Data || img.name))
+      .map(img => ({
+        url: img.base64Data
+          ? `data:${img.mimeType};base64,${img.base64Data}`
+          : `https://church-76ju.vercel.app/api/files/${img.name}`,
+        date: new Date(img.createdAt).toLocaleDateString()
+      })),
+    audios: (audioEng && Array.isArray(audioEng))
+      ? audioEng
+          .filter(audio => audio && audio.url)
+          .map(audio => ({
+            url: audio.hasBase64Data 
+              ? `https://church-76ju.vercel.app/upload/data/audio-stream/${audio._id}` 
+              : audio.url,
+            title: audio.title || 'Untitled',
+            artist: audio.artist || '',
+            album: audio.album || '',
+            duration: audio.duration || 0,
+            uploadDate: new Date(audio.uploadDate || audio.createdAt).toLocaleDateString()
+          }))
+      : []
+  }
+];
 
   // ...existing code...
 
@@ -656,88 +695,97 @@ const Home = () => {
 
 
               <div className="grid md:grid-cols-2 gap-6 justify-center">
-                {upcomingEvents.map((event, index) => (
-                  <motion.div
-                    key={index}
-                    className="event-animate bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
-                    whileHover={{ scale: 1.05 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                  >
-                    <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 text-center">
-                      <h3 className="text-2xl font-bold">{event.date}</h3>
-                    </div>
-                    <div className="p-6">
-                      {loading ? (
-                        <div className="h-[500px] flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-                        </div>
-                      ) : error ? (
-                        <div className="h-[500px] flex items-center justify-center text-red-500">
-                          {error}
-                        </div>
-                      ) : event.images && event.images.length > 0 ? (
-                        <div className="space-y-4">
-                          {event.images.map((image, imgIndex) => (
-                            <div key={imgIndex} className="relative">
-                              <img
-                                src={image.url}
-                                className='h-[500px] w-full object-contain'
-                                alt={`${event.date} ${imgIndex + 1}`}
-                                onError={e => {
-                                  e.target.onerror = null;
-                                  e.target.src = index === 0 ? wordT : wordE;
-                                }}
-                              />
-                              <p className="text-sm text-gray-500 mt-2 text-center">
-                                Uploaded on: {image.date}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="h-[500px] flex items-center justify-center text-gray-500">
-                          No images available
-                        </div>
-                      )}
-
-                      {/* Audio Section */}
-                      <div className="mt-6">
-                        <h4 className="text-lg font-semibold text-indigo-700 mb-3 text-center">
-                          Audio Files
-                        </h4>
-                        {event.audios && event.audios.length > 0 ? (
-                          <div className="space-y-4">
-                            {event.audios.map((audio, audioIdx) => (
-                              <div key={audioIdx} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 flex flex-col gap-2">
-                                <div>
-                                  <span className="font-medium">{audio.title}</span>
-                                  {audio.artist && <span className="ml-2 text-sm text-gray-500">by {audio.artist}</span>}
-                                  {audio.album && <span className="ml-2 text-sm text-gray-400">(Album: {audio.album})</span>}
-                                </div>
-                                <div className="text-xs text-gray-400">
-                                  Uploaded: {audio.uploadDate}
-                                  {audio.duration &&
-                                    <> | {Math.floor(audio.duration / 60)}:{(audio.duration % 60).toString().padStart(2, "0")} min</>
-                                  }
-                                </div>
-                                <audio controls className="w-full">
-                                  <source src={audio.url} type="audio/mpeg" />
-                                  Your browser does not support the audio element.
-                                </audio>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="text-gray-400 text-center">No audio files available</div>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+  {upcomingEvents.map((event, index) => (
+    <motion.div
+      key={index}
+      className="event-animate bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden"
+      whileHover={{ scale: 1.05 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+    >
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 text-center">
+        <h3 className="text-2xl font-bold">{event.date}</h3>
+      </div>
+      <div className="p-6">
+        {loading ? (
+          <div className="h-[500px] flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+          </div>
+        ) : error ? (
+          <div className="h-[500px] flex items-center justify-center text-red-500">
+            {error}
+          </div>
+        ) : event.images && event.images.length > 0 ? (
+          <div className="space-y-4">
+            {event.images.map((image, imgIndex) => (
+              <div key={imgIndex} className="relative">
+                <img
+                  src={image.url}
+                  className='h-[500px] w-full object-contain'
+                  alt={`${event.date} ${imgIndex + 1}`}
+                  onError={e => {
+                    e.target.onerror = null;
+                    e.target.src = index === 0 ? wordT : wordE;
+                  }}
+                />
+                <p className="text-sm text-gray-500 mt-2 text-center">
+                  Uploaded on: {image.date}
+                </p>
               </div>
+            ))}
+          </div>
+        ) : (
+          <div className="h-[500px] flex items-center justify-center text-gray-500">
+            No images available
+          </div>
+        )}
+
+        {/* Audio Section */}
+        <div className="mt-6">
+          <h4 className="text-lg font-semibold text-indigo-700 mb-3 text-center">
+            Audio Files
+          </h4>
+          {audioLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
+              <span className="ml-2 text-gray-500">Loading audio files...</span>
+            </div>
+          ) : event.audios && event.audios.length > 0 ? (
+            <div className="space-y-4">
+              {event.audios.map((audio, audioIdx) => (
+                <div key={audioIdx} className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 flex flex-col gap-2">
+                  <div>
+                    <span className="font-medium">{audio.title}</span>
+                    {audio.artist && <span className="ml-2 text-sm text-gray-500">by {audio.artist}</span>}
+                    {audio.album && <span className="ml-2 text-sm text-gray-400">(Album: {audio.album})</span>}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    Uploaded: {audio.uploadDate}
+                    {audio.duration > 0 &&
+                      <> | {Math.floor(audio.duration / 60)}:{(audio.duration % 60).toString().padStart(2, "0")} min</>
+                    }
+                  </div>
+                  <audio controls className="w-full" preload="metadata">
+                    <source src={audio.url} type="audio/mpeg" />
+                    <source src={audio.url} type="audio/wav" />
+                    <source src={audio.url} type="audio/ogg" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-gray-400 text-center py-4">
+              No audio files available
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  ))}
+</div>
 
 
               <motion.div
