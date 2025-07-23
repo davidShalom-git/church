@@ -121,7 +121,7 @@ const Home = () => {
   useEffect(() => {
     fetchImages(); // Fetch Tamil and English images
     fetchImage();  // Fetch event images
-  }, []);zzz
+  }, []);
 
 
   const upcomingEvents = [
@@ -683,7 +683,7 @@ const Home = () => {
                         </div>
                       )}
 
-
+                   
                     </div>
                   </motion.div>
                 ))}
