@@ -124,9 +124,67 @@ const Home = () => {
   }, []);
 
 
+  const [audioFiles, setAudioFiles] = useState([]);
+  const [audioLoading, setAudioLoading] = useState(true);
+  const [audioError, setAudioError] = useState(null);
+
+  // Add this useEffect to fetch audio files
+  // Updated useEffect to fetch and process audio files by date
+  useEffect(() => {
+    const fetchAudioFiles = async () => {
+      try {
+        setAudioLoading(true);
+        const response = await fetch('https://church-76ju.vercel.app/api/audio/');
+        if (!response.ok) {
+          throw new Error('Failed to fetch audio files');
+        }
+        const data = await response.json();
+
+        // Process audio files to get only the latest for today
+        const today = new Date().toDateString();
+        const todayAudioFiles = data.filter(audio => {
+          const audioDate = new Date(audio.createdAt || audio.uploadDate).toDateString();
+          return audioDate === today;
+        });
+
+        // Sort by upload time and get the most recent one
+        const latestAudio = todayAudioFiles.sort((a, b) =>
+          new Date(b.createdAt || b.uploadDate) - new Date(a.createdAt || a.uploadDate)
+        )[0];
+
+        setAudioFiles(latestAudio ? [latestAudio] : []);
+      } catch (error) {
+        console.error('Error fetching audio files:', error);
+        setAudioError('Failed to load audio files');
+      } finally {
+        setAudioLoading(false);
+      }
+    };
+
+    fetchAudioFiles();
+
+    // Set up interval to check for new audio files every 5 minutes
+    const interval = setInterval(fetchAudioFiles, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
+
+
+
+  // Updated upcomingEvents array - Audio will show only today's latest file
   const upcomingEvents = [
     {
       date: "தமிழ்",
+      type: "tamil",
       images: tamImage
         .filter(img => img && (img.base64Data || img.name))
         .map(img => ({
@@ -138,6 +196,7 @@ const Home = () => {
     },
     {
       date: "English",
+      type: "english",
       images: engImage
         .filter(img => img && (img.base64Data || img.name))
         .map(img => ({
@@ -146,12 +205,24 @@ const Home = () => {
             : `https://church-76ju.vercel.app/api/files/${img.name}`,
           date: new Date(img.createdAt).toLocaleDateString()
         })),
+    },
+    {
+      date: "🎵 Today's Audio",
+      type: "audio",
+      audioFiles: audioFiles.map(audio => ({
+        id: audio._id,
+        name: audio.originalName,
+        filename: audio.filename,
+        size: audio.size,
+        mimetype: audio.mimetype,
+        streamUrl: `https://church-76ju.vercel.app/api/audio/stream/${audio._id}`,
+        downloadUrl: `https://church-76ju.vercel.app/api/audio/download/${audio._id}`,
+        date: new Date(audio.createdAt || audio.uploadDate).toLocaleDateString(),
+        time: new Date(audio.createdAt || audio.uploadDate).toLocaleTimeString()
+      })),
     }
   ];
 
-  // ...existing code...
-
-  // Testimonials data
   const testimonials = [
     { name: "ராஜா", text: "இந்த தேவாலயம் என் வாழ்க்கையை முற்றிலும் மாற்றியது. நான் ஒரு புதிய நபராக உணர்கிறேன்.", image: profile },
     { name: "கவிதா", text: "அன்புள்ள சமூகம், அற்புதமான போதனைகள். என் குடும்பத்திற்கு இது ஒரு வரப்பிரசாதம்.", image: profile },
@@ -634,8 +705,7 @@ const Home = () => {
                 </h2>
               </motion.div>
 
-
-              <div className="grid md:grid-cols-2 gap-6 justify-center">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
                 {upcomingEvents.map((event, index) => (
                   <motion.div
                     key={index}
@@ -646,49 +716,113 @@ const Home = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                   >
-                    <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 text-center">
+                    <div className={`${event.type === 'audio'
+                      ? 'bg-gradient-to-r from-green-600 to-emerald-600'
+                      : 'bg-gradient-to-r from-indigo-600 to-purple-600'
+                      } text-white p-4 text-center`}>
                       <h3 className="text-2xl font-bold">{event.date}</h3>
                     </div>
+
                     <div className="p-6">
-                      {loading ? (
-                        <div className="h-[500px] flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-                        </div>
-                      ) : error ? (
-                        <div className="h-[500px] flex items-center justify-center text-red-500">
-                          {error}
-                        </div>
-                      ) : event.images && event.images.length > 0 ? (
-                        <div className="space-y-4">
-                          {event.images.map((image, imgIndex) => (
-                            <div key={imgIndex} className="relative">
-                              <img
-                                src={image.url}
-                                className='h-[500px] w-full object-contain'
-                                alt={`${event.date} ${imgIndex + 1}`}
-                                onError={e => {
-                                  e.target.onerror = null;
-                                  e.target.src = index === 0 ? wordT : wordE;
-                                }}
-                              />
-                              <p className="text-sm text-gray-500 mt-2 text-center">
-                                Uploaded on: {image.date}
-                              </p>
+                      {/* Image Files Section */}
+                      {event.type !== 'audio' ? (
+                        <div>
+                          {loading ? (
+                            <div className="h-[500px] flex items-center justify-center">
+                              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
                             </div>
-                          ))}
+                          ) : error ? (
+                            <div className="h-[500px] flex items-center justify-center text-red-500">
+                              {error}
+                            </div>
+                          ) : event.images && event.images.length > 0 ? (
+                            <div className="space-y-4">
+                              {event.images.map((image, imgIndex) => (
+                                <div key={imgIndex} className="relative">
+                                  <img
+                                    src={image.url}
+                                    className='h-[500px] w-full object-contain'
+                                    alt={`${event.date} ${imgIndex + 1}`}
+                                    onError={e => {
+                                      e.target.onerror = null;
+                                      e.target.src = index === 0 ? wordT : wordE;
+                                    }}
+                                  />
+                                  <p className="text-sm text-gray-500 mt-2 text-center">
+                                    Uploaded on: {image.date}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="h-[500px] flex items-center justify-center text-gray-500">
+                              No images available
+                            </div>
+                          )}
                         </div>
                       ) : (
-                        <div className="h-[500px] flex items-center justify-center text-gray-500">
-                          No images available
+                        /* Audio Files Section - Updated for single daily audio */
+                        <div>
+                          {audioLoading ? (
+                            <div className="h-[400px] flex items-center justify-center">
+                              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+                            </div>
+                          ) : audioError ? (
+                            <div className="h-[400px] flex items-center justify-center text-red-500">
+                              {audioError}
+                            </div>
+                          ) : event.audioFiles && event.audioFiles.length > 0 ? (
+                            <div className="space-y-4">
+                              {event.audioFiles.map((audio, audioIndex) => (
+                                <div key={audioIndex} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border">
+                                  {/* Audio Info */}
+                                  <div className="mb-3">
+                                    <h4 className="font-semibold text-gray-800 dark:text-white truncate" title={audio.name}>
+                                      {audio.name}
+                                    </h4>
+                                    
+                                  </div>
+
+                                  {/* Audio Player */}
+                                  <audio
+                                    controls
+                                    className="w-full mb-3"
+                                    preload="metadata"
+                                  >
+                                    <source src={audio.streamUrl} type={audio.mimetype} />
+                                    Your browser does not support the audio element.
+                                  </audio>
+
+                                  {/* Download Button */}
+                                  <div className="flex justify-center">
+                                    <a
+                                      href={audio.downloadUrl}
+                                      download={audio.name}
+                                      className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                                    >
+                                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                      </svg>
+                                      Download
+                                    </a>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="h-[400px] flex flex-col items-center justify-center text-gray-500">
+                              <svg className="w-16 h-16 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                              </svg>
+                              <p>No audio file uploaded today</p>
+                            </div>
+                          )}
                         </div>
                       )}
-
-                   
                     </div>
                   </motion.div>
                 ))}
               </div>
-
 
               <motion.div
                 className="text-center mt-10 flex justify-center"
