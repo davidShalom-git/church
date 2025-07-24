@@ -53,83 +53,39 @@ uploadDirs.forEach((dir) => {
   }
 });
 
-// Enhanced CORS configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://localhost:4000',
-      'http://localhost:4100',
-      'http://localhost:1000',
-      'https://www.revivalprayerhouse.online',
-      'https://church-data-56lv.vercel.app',
-      'https://church-76ju.vercel.app',
-      'https://church-data-age.vercel.app'
-    ];
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      console.log('Blocked origin:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: [
-    'Content-Type', 
-    'Authorization', 
-    'Origin', 
-    'X-Requested-With', 
-    'Accept',
-    'Access-Control-Request-Method',
-    'Access-Control-Request-Headers'
-  ],
-  credentials: false,
-  optionsSuccessStatus: 200,
-  preflightContinue: false
-};
-
-// Apply CORS globally - must be before routes
-app.use(cors(corsOptions));
-
-// Handle preflight requests explicitly
-app.options('*', (req, res) => {
-  console.log('Preflight request from:', req.headers.origin);
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,Origin,X-Requested-With,Accept');
-  res.header('Access-Control-Max-Age', '86400'); // 24 hours
-  res.sendStatus(200);
-});
-
-// Debug middleware - place after CORS
+// SIMPLE CORS FIX - Set headers directly on every request
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  console.log('Origin:', req.headers.origin);
+  // Allow all origins during development, specific origins in production
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:4000',
+    'http://localhost:4100',
+    'http://localhost:1000',
+    'https://www.revivalprayerhouse.online',
+    'https://church-data-56lv.vercel.app',
+    'https://church-76ju.vercel.app',
+    'https://church-data-age.vercel.app'
+  ];
+
+  const origin = req.headers.origin;
   
-  // Add CORS headers manually as backup
-  if (req.headers.origin) {
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://localhost:4000', 
-      'http://localhost:4100',
-      'http://localhost:1000',
-      'https://www.revivalprayerhouse.online',
-      'https://church-data-56lv.vercel.app',
-      'https://church-76ju.vercel.app',
-      'https://church-data-age.vercel.app'
-    ];
-    
-    if (allowedOrigins.includes(req.headers.origin)) {
-      res.header('Access-Control-Allow-Origin', req.headers.origin);
-      res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH');
-      res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,Origin,X-Requested-With,Accept');
-    }
+  // Set CORS headers
+  if (allowedOrigins.includes(origin) || !origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
   }
   
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With, Accept');
+  res.setHeader('Access-Control-Allow-Credentials', 'false');
+  res.setHeader('Access-Control-Max-Age', '86400');
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    console.log('OPTIONS request from:', origin);
+    return res.status(200).end();
+  }
+
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url} - Origin: ${origin}`);
   next();
 });
 
@@ -156,6 +112,16 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Test endpoint to verify CORS
+app.get('/test-cors', (req, res) => {
+  res.json({ 
+    message: 'CORS is working!',
+    origin: req.headers.origin,
+    method: req.method,
+    timestamp: new Date().toISOString()
+  });
+});
+
 // 404 handler
 app.use('*', (req, res) => {
   console.log(`404 - Route not found: ${req.method} ${req.originalUrl}`);
@@ -165,6 +131,7 @@ app.use('*', (req, res) => {
     url: req.originalUrl,
     availableRoutes: [
       'GET /health',
+      'GET /test-cors',
       'POST /api/audio/upload',
       'GET /api/audio',
       'GET /api/audio/:id',
@@ -183,24 +150,6 @@ app.use((err, req, res, next) => {
     origin: req.headers.origin
   });
   
-  // Ensure CORS headers are set even on errors
-  if (req.headers.origin) {
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://localhost:4000',
-      'http://localhost:4100', 
-      'http://localhost:1000',
-      'https://www.revivalprayerhouse.online',
-      'https://church-data-56lv.vercel.app',
-      'https://church-76ju.vercel.app',
-      'https://church-data-age.vercel.app'
-    ];
-    
-    if (allowedOrigins.includes(req.headers.origin)) {
-      res.header('Access-Control-Allow-Origin', req.headers.origin);
-    }
-  }
-  
   res.status(500).json({ 
     error: 'Internal Server Error', 
     message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
@@ -210,7 +159,6 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 4100;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log('Environment:', process.env.NODE_ENV || 'development');
   console.log('CORS enabled for origins:', [
     'http://localhost:3000',
     'http://localhost:4000',
@@ -225,4 +173,5 @@ app.listen(PORT, () => {
   console.log('  - Audio API: /api/audio');
   console.log('  - Church API: /api/church');
   console.log('  - Health check: /health');
+  console.log('  - CORS test: /test-cors');
 });
