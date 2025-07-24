@@ -7,6 +7,7 @@ require('dotenv').config();
 const eventRouter = require('./router/EventRouter.js');
 const tamilRouter = require('./router/TamilRouter.js');
 const englishRouter = require('./router/EnglishRoute.js');
+const audioRouter = require('./router/AudioRoute.js'); // Add audio router
 
 const app = express();
 
@@ -32,7 +33,7 @@ mongoose
 const baseUploadPath = process.env.NODE_ENV === 'production'
   ? '/tmp'
   : path.join(__dirname, 'uploads');
-const uploadDirs = ['general', 'tamil', 'english'].map((dir) =>
+const uploadDirs = ['general', 'tamil', 'english', 'audio'].map((dir) => // Add audio directory
   path.join(baseUploadPath, dir)
 );
 
@@ -95,6 +96,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/api/church', eventRouter);
 app.use('/api/church', tamilRouter);
 app.use('/api/church', englishRouter);
+app.use('/api/audio', audioRouter); // Add audio routes
 
 // Health check
 app.get('/health', (req, res) => {
@@ -116,4 +118,5 @@ const PORT = process.env.PORT || 4100;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log('CORS enabled for origins:', corsOptions.origin);
+  console.log('Audio API available at: /api/audio');
 });
