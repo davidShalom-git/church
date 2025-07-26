@@ -64,7 +64,8 @@ app.use((req, res, next) => {
     'https://www.revivalprayerhouse.online',
     'https://church-data-56lv.vercel.app',
     'https://church-76ju.vercel.app',
-    'https://church-data-age.vercel.app'
+    'https://church-data-age.vercel.app',
+    'https://church-data.vercel.app'
   ];
 
   const origin = req.headers.origin;
