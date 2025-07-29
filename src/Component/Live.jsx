@@ -122,23 +122,6 @@ const DynamicVideoButton = () => {
         </button>
       </div>
       
-      {/* Status indicators */}
-      <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
-        {lastUpdated && (
-          <span>Last updated: {lastUpdated}</span>
-        )}
-        {error && (
-          <div className="flex items-center gap-1 text-red-500">
-            <AlertCircle size={12} />
-            <span>Error: {error}</span>
-          </div>
-        )}
-      </div>
-      
-      {/* Debug info (remove in production) */}
-      <div className="mt-2 text-xs text-gray-400 break-all">
-        Current URL: {latestVideoUrl}
-      </div>
     </div>
   );
 };
