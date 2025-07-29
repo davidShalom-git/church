@@ -621,69 +621,9 @@ const formatFileSize = (bytes) => {
                 </motion.div>
               </motion.div>
             </motion.div>
+         
 
-            {/* Subtle scroll indicator */}
-            <motion.div
-              className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2, duration: 1 }}
-            >
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="flex flex-col items-center"
-              >
-                <span className="text-white/70 text-sm mb-2">Scroll</span>
-                <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-              </motion.div>
-            </motion.div>
-
-            {/* Wave footer with responsive design */}
-            <div className="absolute bottom-0 left-0 w-full">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
-                <path
-                  fill={darkMode ? "#1f2937" : "#ffffff"}
-                  fillOpacity="1"
-                  d="M0,128L48,138.7C96,149,192,171,288,176C384,181,480,171,576,144C672,117,768,75,864,69.3C960,64,1056,96,1152,122.7C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                ></path>
-              </svg>
-            </div>
           </motion.div>
-
-          {/* Announcement Banner with motion */}
-          <motion.div
-            className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-4 px-6 my-8 rounded-xl max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="flex items-center gap-3">
-              <motion.div
-                className="bg-white/20 p-2 rounded-full"
-                whileHover={{ rotate: 15 }}
-              >
-                <Calendar size={24} />
-              </motion.div>
-              <div className="text-center md:text-left">
-                <h3 className="font-bold">அடுத்த சிறப்பு நிகழ்வு: ஞாயிறு ஆராதனை </h3>
-                <p className="text-white/80">மே 18, 2025 - காலை 7:30 </p>
-              </div>
-            </div>
-            <motion.a
-              href="#event"
-              className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              மேலும் அறிய
-            </motion.a>
-          </motion.div>
-
-          {/* Three Pillars Section with enhanced design */}
-
 
 
           <section className="py-16 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-gray-900 dark:to-gray-800">
