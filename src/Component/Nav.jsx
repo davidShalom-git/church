@@ -27,13 +27,13 @@ const Nav = () => {
       >
         <nav>
           <ul className="flex flex-col md:flex-row md:space-x-5 text-center">
-            <Link to="/" className="text-[16px] ] text-white md:text-black md:text-[24px] py-2 md:py-0">
+            <Link to="/" className="text-[16px] ] text-white md:text-white md:text-[24px] py-2 md:py-0">
               Home
             </Link>
-            <Link to="/video" className="text-[16px]  text-white md:text-black md:text-[24px] py-2 md:py-0">
+            <Link to="/video" className="text-[16px]  text-white md:text-white md:text-[24px] py-2 md:py-0">
               Video
             </Link>
-            <Link to="/about" className="text-[16px]  text-white md:text-black md:text-[24px] py-2 md:py-0">
+            <Link to="/about" className="text-[16px]  text-white md:text-white md:text-[24px] py-2 md:py-0">
               About
             </Link>
             {/* Profile Section inside Navigation for Mobile */}
