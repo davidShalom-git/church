@@ -171,13 +171,13 @@ const Home = () => {
   }, []);
 
 
-const formatFileSize = (bytes) => {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-};
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
 
 
 
@@ -353,7 +353,7 @@ const formatFileSize = (bytes) => {
 
   return (
     <div className={darkMode ? "dark" : ""}>
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+      <div className="min-h-screen bg-blue-100 dark:bg-gray-800 transition-colors duration-300">
         {/* Navbar */}
         <motion.div
           className={`fixed top-0 left-0 right-0 z-50 ${isScrolled ? 'bg-blue-50/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg' : 'bg-transparent'} transition-all duration-300`}
@@ -612,7 +612,7 @@ const formatFileSize = (bytes) => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.2, duration: 1 }}
               >
-                 <DynamicVideoButton/>
+                <DynamicVideoButton />
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                   <a href="#event" className="group relative overflow-hidden bg-white hover:bg-gray-100 text-indigo-700 px-6 py-3 md:px-8 md:py-4 rounded-lg font-medium transition-colors w-full inline-block">
                     <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-amber-200/0 via-amber-200/20 to-amber-200/0 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
@@ -621,7 +621,7 @@ const formatFileSize = (bytes) => {
                 </motion.div>
               </motion.div>
             </motion.div>
-         
+
 
           </motion.div>
 
@@ -715,7 +715,7 @@ const formatFileSize = (bytes) => {
                                     <h4 className="font-semibold text-gray-800 dark:text-white truncate" title={audio.name}>
                                       {audio.name}
                                     </h4>
-                                    
+
                                   </div>
 
                                   {/* Audio Player */}
