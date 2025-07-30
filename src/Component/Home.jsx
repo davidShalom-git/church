@@ -404,22 +404,22 @@ const Home = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   {item === "Home" ? (
-                    <Link to="/" className="nav-link text-black text-xl">
+                    <Link to="/" className="nav-link text-white text-xl">
                       <Globe className="w-4 h-4" />
                       <span>{item}</span>
                     </Link>
                   ) : item === "Video" ? (
-                    <Link to="/video" className="nav-link text-black text-xl">
+                    <Link to="/video" className="nav-link text-white text-xl">
                       <Play className="w-4 h-4" />
                       <span>{item}</span>
                     </Link>
                   ) : item === "Events" ? (
-                    <a href="#event" className="nav-link text-black text-xl">
+                    <a href="#event" className="nav-link text-white text-xl">
                       <Calendar className="w-4 h-4" />
                       <span>{item}</span>
                     </a>
                   ) : (
-                    <a href="#about" className="nav-link text-black text-xl">
+                    <a href="#about" className="nav-link text-white text-xl">
                       <Users className="w-4 h-4" />
                       <span>{item}</span>
                     </a>
