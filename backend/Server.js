@@ -8,6 +8,8 @@ const eventRouter = require('./router/EventRouter.js');
 const tamilRouter = require('./router/TamilRouter.js');
 const englishRouter = require('./router/EnglishRoute.js');
 const audioRouter = require('./router/AudioRoute.js');
+const tamAudio = require('./router/TamilAudio.js')
+const engAudio = require('./router/EnglishAudio.js')
 
 const app = express();
 
@@ -99,6 +101,8 @@ app.use('/api/church', eventRouter);
 app.use('/api/church', tamilRouter);
 app.use('/api/church', englishRouter);
 app.use('/api/audio', audioRouter);
+app.use('/api/TamAudio', tamAudio);
+app.use('/api/EngAudio', engAudio);
 
 // Health check
 app.get('/health', (req, res) => {
