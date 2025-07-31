@@ -56,6 +56,7 @@ uploadDirs.forEach((dir) => {
 });
 
 // SIMPLE CORS FIX - Set headers directly on every request
+// SIMPLE CORS FIX - Set headers directly on every request
 app.use((req, res, next) => {
   // Allow all origins during development, specific origins in production
   const allowedOrigins = [
@@ -78,7 +79,8 @@ app.use((req, res, next) => {
   }
   
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With, Accept');
+  // ADD cache-control to the allowed headers
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Origin, X-Requested-With, Accept, Cache-Control');
   res.setHeader('Access-Control-Allow-Credentials', 'false');
   res.setHeader('Access-Control-Max-Age', '86400');
 
