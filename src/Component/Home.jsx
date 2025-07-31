@@ -12,6 +12,7 @@ import TestimonialsComponent from '../Pages/Testimonial';
 import AboutSection from '../Pages/About';
 import CTASection from '../Pages/CTA';
 import ContactSection from '../Pages/Contact';
+import Video from '../Pages/Video';
 
 // Import the new components
 
@@ -302,6 +303,8 @@ const Home = () => {
 
           {/* Events Section */}
           <EventsComponent />
+
+          <Video />
 
           {/* Testimonials Section */}
           <TestimonialsComponent />
