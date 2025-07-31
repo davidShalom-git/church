@@ -5,6 +5,8 @@ import { ChevronDown } from "lucide-react";
 import axios from 'axios';
 import wordT from '../assets/wordT.jpg';
 import wordE from '../assets/wordE.jpg';
+import DynamicTamilVideoButton from '../Component/TamilAudio';
+import DynamicEnglishVideoButton from '../Component/EnglishAudio'; // Add this import
 
 const DailyPromisesComponent = () => {
   const [tamImage, setTamImage] = useState([]);
@@ -195,12 +197,31 @@ const DailyPromisesComponent = () => {
                             <p className="text-sm text-gray-500 mt-2 text-center">
                               Uploaded on: {image.date}
                             </p>
+                            
+                            {/* Dynamic Button Section - Show appropriate button based on type */}
+                            <div className="mt-4">
+                              {event.type === 'tamil' ? (
+                                <DynamicTamilVideoButton />
+                              ) : event.type === 'english' ? (
+                                <DynamicEnglishVideoButton />
+                              ) : null}
+                            </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="h-[500px] flex items-center justify-center text-gray-500">
-                        No images available
+                      <div className="h-[500px] flex flex-col items-center justify-center text-gray-500">
+                        <div className="text-center mb-4">
+                          No images available
+                        </div>
+                        {/* Show dynamic button even when no image */}
+                        <div className="mt-4">
+                          {event.type === 'tamil' ? (
+                            <DynamicTamilVideoButton />
+                          ) : event.type === 'english' ? (
+                            <DynamicEnglishVideoButton />
+                          ) : null}
+                        </div>
                       </div>
                     )}
                   </div>
