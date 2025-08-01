@@ -29,11 +29,11 @@ const CTASection = () => {
                 சிறப்பு அழைப்பு ✨
               </span>
             </motion.div>
-            
+
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
               தேவனுடைய ராஜ்யத்தை கட்டத்தயாரா?
             </h2>
-            
+
             <p className="text-gray-600 dark:text-gray-300 text-lg">
               வாராந்திர ஆராதனைகள், விசேஷ கூட்டங்கள், மற்றும் சமூக நிகழ்வுகளில் பங்கேற்று ஆசீர்வாதங்களைப் பெறுங்கள்.
             </p>
@@ -67,7 +67,7 @@ const CTASection = () => {
 
           {/* Right Side Image */}
           <motion.div
-            className="relative"
+            className="relative mx-auto w-full max-w-xs sm:max-w-sm md:max-w-full"
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -77,36 +77,35 @@ const CTASection = () => {
               <img
                 src={church}
                 alt="Church Community"
-                className="w-full h-[500px] object-cover"
+                className="w-full h-[320px] sm:h-[400px] md:h-[500px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/80 to-transparent"></div>
-           
             </div>
 
             {/* Decorative Elements */}
-            <motion.div 
+            <motion.div
               className="absolute -top-4 -right-4 w-24 h-24 bg-purple-600/20 rounded-full -z-10"
-              animate={{ 
+              animate={{
                 scale: [1, 1.2, 1],
-                rotate: [0, 180, 360] 
+                rotate: [0, 180, 360]
               }}
-              transition={{ 
-                duration: 8, 
-                repeat: Infinity, 
-                ease: "linear" 
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "linear"
               }}
             ></motion.div>
-            
-            <motion.div 
+
+            <motion.div
               className="absolute -bottom-4 -left-4 w-32 h-32 bg-indigo-600/20 rounded-full -z-10"
-              animate={{ 
+              animate={{
                 scale: [1, 1.1, 1],
-                rotate: [360, 180, 0] 
+                rotate: [360, 180, 0]
               }}
-              transition={{ 
-                duration: 10, 
-                repeat: Infinity, 
-                ease: "linear" 
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "linear"
               }}
             ></motion.div>
           </motion.div>
