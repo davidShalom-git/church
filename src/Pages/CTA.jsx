@@ -80,21 +80,7 @@ const CTASection = () => {
                 className="w-full h-[500px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                <div className="flex items-center gap-4 mb-4">
-                  <motion.div 
-                    className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center cursor-pointer"
-                    whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.3)" }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Play className="w-6 h-6" />
-                  </motion.div>
-                  <div>
-                    <div className="font-medium">அடுத்த நிகழ்வு</div>
-                    <div className="text-sm text-white/80">ஞாயிறு காலை 9:00</div>
-                  </div>
-                </div>
-              </div>
+           
             </div>
 
             {/* Decorative Elements */}

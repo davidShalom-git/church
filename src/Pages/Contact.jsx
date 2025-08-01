@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Phone, Instagram, Youtube } from "lucide-react";
+import { Phone, Instagram, Youtube, Globe } from "lucide-react";
 
 const ContactSection = () => {
   return (
@@ -75,7 +75,27 @@ const ContactSection = () => {
                   <Youtube size={20} className="text-white" />
                 </div>
                 <span className="font-medium text-gray-700 dark:text-gray-300">
-                  vijayforrevival
+                  vijay_for_revival
+                </span>
+              </Link>
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              <Link
+                to="https://www.revivalprayerhouse.online"
+                className="flex items-center gap-3 p-4 bg-gradient-to-r from-red-50 to-pink-50 dark:from-gray-800 dark:to-gray-700 rounded-lg hover:shadow-md transition-all duration-300"
+              >
+                <div className="p-2 bg-gradient-to-r from-red-500 to-red-600 rounded-full">
+                  <Globe size={20} className="text-white" />
+                </div>
+                <span className="font-medium text-gray-700 dark:text-gray-300">
+                  vijay_for_revival
                 </span>
               </Link>
             </motion.div>
