@@ -21,7 +21,7 @@ const Video = () => {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-500 mb-4 tracking-tight">
-            ⭐ ஜெப வேலை 🌟
+            ⭐ ஜெப வேளை 🌟
           </h1>
           
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-orange-400 to-transparent mx-auto"></div>
